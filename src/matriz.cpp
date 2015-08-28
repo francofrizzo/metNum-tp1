@@ -58,7 +58,7 @@ vector matriz::eliminacionGaussiana(vector& b) {
     int n = ancho();
   //  if (b.tamano() == n) {
       for (int j = 0; j < n; j++) {
-        for (int i = j + 1; j < n; j++) {
+        for (int i = j + 1; i < n; i++) {
           int m = mat[i][j] / mat[j][j];
           for (int k = j; k < n; k++) {
             mat[i][k] = mat[i][k] - m * mat[j][k];
@@ -74,6 +74,47 @@ vector matriz::eliminacionGaussiana(vector& b) {
   //  throw domain_error("Error: La matriz no es cuadrada.");
   //}
 }
+void matriz::factorizacionLU() {
+  if (esCuadrada()) {
+    int n = ancho();
+    
+    if (b.tamano() == n) {
+      for (int j = 0; j < n; j++) {
+        for (int i = j + 1; i < n; i++) {
+          int m = mat[i][j] / mat[j][j];
+          mat[i][j] =  m;
+          for (int k = j + 1; k < n; k++) {
+            mat[i][k] = mat[i][k] - m * mat[j][k];
+          }
+          
+        }
+      }    
+    } else {
+        throw domain_error("Error: La matriz no es cuadrada.");
+    }
+
+  } else {
+      throw domain_error("Error: La matriz no es cuadrada.");
+
+  }
+}
+
+vector matriz::solucionLU(vector& b){
+  //multiplicar con L con b.
+  int n = mat.ancho();
+  vector auxb = vector(n);
+  for (int i = 0; i < n; i++) {
+    auxb[i] = b[i];
+    for (int j = 0; j < i; j++){
+      auxb[i] = auxb[i] + mat[i][j] * b[j];
+    }
+  }
+
+
+
+}
+
+
 
 vector matriz::sustHaciaAtras(vector& b) {
   int n = ancho();
