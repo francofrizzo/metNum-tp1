@@ -109,9 +109,7 @@ vector matriz::solucionLU(vector& b){
       auxb[i] = auxb[i] + mat[i][j] * b[j];
     }
   }
-
-
-
+  return sustHaciaAtras(auxb);
 }
 
 
@@ -120,7 +118,7 @@ vector matriz::sustHaciaAtras(vector& b) {
   int n = ancho();
   vector res = vector(n);
 
-  for (int i = n; i >= 0; i--) {
+  for (int i = n-1; i >= 0; i--) {
     int suma = 0;
     for (int j = i + 1; j < n; j++) {
       suma = suma + mat[i][j] * res[j];
