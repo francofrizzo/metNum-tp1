@@ -1,10 +1,13 @@
 #include <iostream>
+#include <iomanip>
 #include "vector.h"
 
 using std::cout;
 using std::cin;
 using std::cerr;
 using std::endl;
+using std::setfill;
+using std::setw;
 
 class matriz {
  private:
