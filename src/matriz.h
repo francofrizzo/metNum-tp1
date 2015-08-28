@@ -13,7 +13,7 @@ class matriz {
  private:
     int filas;
     int columnas;
-    vector* mat; //NO ENTENDEMOS POR QUE DOUBLE y no vector
+    vector* mat;
 
  public:
     matriz();
@@ -30,6 +30,8 @@ class matriz {
 
     vector eliminacionGaussiana(vector& b);
     vector sustHaciaAtras(vector& b);
+    void factorizacionLU();
+    vector solucionLU(vector& b);
 };
 
 std::ostream& operator<<(std::ostream& os, const matriz& mat);

@@ -24,6 +24,7 @@ matriz::matriz(int n, int m){
 }
 
 matriz::~matriz() {
+  // cout << "¡Han llamado al destructor de matrices! Quieren que elimine " << this << ": " << endl << *this << endl;
 /*  for(int i = 0; i < filas; i++) {
     ~vector(mat[i]);
   }
@@ -54,9 +55,9 @@ vector& matriz::operator[](int i) const {
 }
 
 vector matriz::eliminacionGaussiana(vector& b) {
-  //if (esCuadrada()) {
+  if (esCuadrada()) {
     int n = ancho();
-  //  if (b.tamano() == n) {
+    if (b.tamano() == n) {
       for (int j = 0; j < n; j++) {
         for (int i = j + 1; i < n; i++) {
           double m = mat[i][j] / mat[j][j];
@@ -66,42 +67,38 @@ vector matriz::eliminacionGaussiana(vector& b) {
           b[i] = b[i] - m * b[j];
         }
       }
-      // return sustHaciaAtras(b);
-  //  } else {
-  //    throw domain_error("Error: Las dimensiones del vector y de la matriz no coinciden.");
-  //  }
-  //} else {
-  //  throw domain_error("Error: La matriz no es cuadrada.");
-  //}
+      return vector();
+      return sustHaciaAtras(b);
+   } else {
+     cout << "Error: Las dimensiones del vector y de la matriz no coinciden." << endl;
+     return vector();
+   }
+  } else {
+   cout << "Error: La matriz no es cuadrada." << endl;
+   return vector();
+  }
 }
 void matriz::factorizacionLU() {
   if (esCuadrada()) {
     int n = ancho();
-    
-    if (b.tamano() == n) {
-      for (int j = 0; j < n; j++) {
-        for (int i = j + 1; i < n; i++) {
-          int m = mat[i][j] / mat[j][j];
-          mat[i][j] =  m;
-          for (int k = j + 1; k < n; k++) {
-            mat[i][k] = mat[i][k] - m * mat[j][k];
-          }
-          
+    for (int j = 0; j < n; j++) {
+      for (int i = j + 1; i < n; i++) {
+        int m = mat[i][j] / mat[j][j];
+        mat[i][j] =  m;
+        for (int k = j + 1; k < n; k++) {
+          mat[i][k] = mat[i][k] - m * mat[j][k];
         }
-      }    
-    } else {
-        throw domain_error("Error: La matriz no es cuadrada.");
-    }
-
+        
+      }
+    }    
   } else {
-      throw domain_error("Error: La matriz no es cuadrada.");
-
+      cout << "Error: La matriz no es cuadrada." << endl;
   }
 }
 
 vector matriz::solucionLU(vector& b){
-  //multiplicar con L con b.
-  int n = mat.ancho();
+  // multiplicar con L con b.
+  int n = ancho();
   vector auxb = vector(n);
   for (int i = 0; i < n; i++) {
     auxb[i] = b[i];

@@ -1,8 +1,8 @@
 #include "./matriz.h"
 
 int main(){
-    vector b = vector(5);
-    for (int i = 0; i < 5; i++) {
+    vector b = vector(3);
+    for (int i = 0; i < 3; i++) {
         b[i] = i;
     }
 

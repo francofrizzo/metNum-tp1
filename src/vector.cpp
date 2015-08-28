@@ -22,6 +22,7 @@ vector::vector(int n) {
 }
 
 vector::~vector() {
+	cout << "¡Han llamado al destructor de vectores! Quieren que elimine " << this << ": " << *this << endl;
 	// if (vec != NULL) {
 	// 	delete vec;
 	// }
