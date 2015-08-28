@@ -1,15 +1,28 @@
 #include "./matriz.h"
 
 int main(){
-	matriz a = matriz(5, 5);
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			cout << a[i];
-			a[i][j] = double(i);
-		}
-	}
+    vector b = vector(5);
+    for (int i = 0; i < 5; i++) {
+        b[i] = i;
+    }
 
-	cout << a;
+    cout << b;
+
+	matriz a = matriz(3, 3);
+	
+    a[0][0] = 9;
+    a[0][1] = 7;
+    a[0][2] = 5;
+    a[1][0] = 6;
+    a[1][1] = 4;
+    a[1][2] = 0;
+    a[2][0] = 1;
+    a[2][1] = 0;
+    a[2][2] = 0;
+
+    a.eliminacionGaussiana(b);
+
+    cout << a;
 
 	return 0;
 }

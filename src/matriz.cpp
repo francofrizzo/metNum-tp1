@@ -59,14 +59,14 @@ vector matriz::eliminacionGaussiana(vector& b) {
   //  if (b.tamano() == n) {
       for (int j = 0; j < n; j++) {
         for (int i = j + 1; i < n; i++) {
-          int m = mat[i][j] / mat[j][j];
+          double m = mat[i][j] / mat[j][j];
           for (int k = j; k < n; k++) {
             mat[i][k] = mat[i][k] - m * mat[j][k];
           }
           b[i] = b[i] - m * b[j];
         }
       }
-      return sustHaciaAtras(b);
+      // return sustHaciaAtras(b);
   //  } else {
   //    throw domain_error("Error: Las dimensiones del vector y de la matriz no coinciden.");
   //  }
@@ -133,6 +133,9 @@ vector matriz::sustHaciaAtras(vector& b) {
 
 std::ostream& operator<<(std::ostream& os, const matriz& mat) {
   for (int i = 0; i < mat.alto(); i++) {
-    cout << "Fila " << i << ": " << mat[i] << endl; 
+    for (int j = 0; j < mat.alto(); j++) {
+      cout << setfill(' ') << setw(10) << mat[i][j] << " ";
+    }
+    cout << endl;
   }
 }

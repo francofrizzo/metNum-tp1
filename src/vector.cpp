@@ -22,9 +22,9 @@ vector::vector(int n) {
 }
 
 vector::~vector() {
-	if (vec != NULL) {
-		delete vec;
-	}
+	// if (vec != NULL) {
+	// 	delete vec;
+	// }
 }
 
 int vector::tamano() const{
