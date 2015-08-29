@@ -22,7 +22,7 @@ vector::vector(int n) {
 }
 
 vector::~vector() {
-	cout << "¡Han llamado al destructor de vectores! Quieren que elimine " << this << ": " << *this << endl;
+	// cout << "¡Han llamado al destructor de vectores! Quieren que elimine " << this << ": " << *this << endl;
 	// if (vec != NULL) {
 	// 	delete vec;
 	// }
@@ -42,12 +42,13 @@ double& vector::operator[](int i) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const vector& vec) {
-	cout << "[";
+	os << "[";
 	for (int i = 0; i < vec.tamano() - 1; i++) {
-		cout << vec[i] << ", ";
+		os << vec[i] << ", ";
 	}
 	if (vec.tamano() > 0) {
-		cout << vec[vec.tamano() - 1];
+		os << vec[vec.tamano() - 1];
 	}
-	cout << "]" << endl;
+	os << "]" << endl;
+	return os;
 }

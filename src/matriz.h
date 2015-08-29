@@ -29,9 +29,9 @@ class matriz {
     vector& operator[](int i) const;
 
     vector eliminacionGaussiana(vector& b);
-    vector sustHaciaAtras(vector& b);
+    vector sustHaciaAtras(vector& b) const;
     void factorizacionLU();
-    vector solucionLU(vector& b);
+    vector solucionLU(vector& b) const;
 };
 
 std::ostream& operator<<(std::ostream& os, const matriz& mat);

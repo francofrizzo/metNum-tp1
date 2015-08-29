@@ -67,7 +67,6 @@ vector matriz::eliminacionGaussiana(vector& b) {
           b[i] = b[i] - m * b[j];
         }
       }
-      return vector();
       return sustHaciaAtras(b);
    } else {
      cout << "Error: Las dimensiones del vector y de la matriz no coinciden." << endl;
@@ -88,7 +87,6 @@ void matriz::factorizacionLU() {
         for (int k = j + 1; k < n; k++) {
           mat[i][k] = mat[i][k] - m * mat[j][k];
         }
-        
       }
     }    
   } else {
@@ -96,7 +94,7 @@ void matriz::factorizacionLU() {
   }
 }
 
-vector matriz::solucionLU(vector& b){
+vector matriz::solucionLU(vector& b) const {
   // multiplicar con L con b.
   int n = ancho();
   vector auxb = vector(n);
@@ -111,12 +109,12 @@ vector matriz::solucionLU(vector& b){
 
 
 
-vector matriz::sustHaciaAtras(vector& b) {
+vector matriz::sustHaciaAtras(vector& b) const {
   int n = ancho();
   vector res = vector(n);
 
   for (int i = n-1; i >= 0; i--) {
-    int suma = 0;
+    double suma = 0;
     for (int j = i + 1; j < n; j++) {
       suma = suma + mat[i][j] * res[j];
     }
@@ -129,8 +127,9 @@ vector matriz::sustHaciaAtras(vector& b) {
 std::ostream& operator<<(std::ostream& os, const matriz& mat) {
   for (int i = 0; i < mat.alto(); i++) {
     for (int j = 0; j < mat.alto(); j++) {
-      cout << setfill(' ') << setw(10) << mat[i][j] << " ";
+      os << setfill(' ') << setw(12) << mat[i][j] << " ";
     }
-    cout << endl;
+    os << endl;
   }
+  return os;
 }
