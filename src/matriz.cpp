@@ -9,28 +9,32 @@ matriz::matriz() {
 matriz::matriz(const matriz& o) {
   columnas = o.columnas;
   filas = o.filas;
+  mat = new vector[filas];
   for (int i = 0; i < filas; i++) {
-    mat[i] = vector(o[i]);
+    mat[i] = vector(o.mat[i]);
   }
 }
 
 matriz::matriz(int n, int m){
   columnas = n;
   filas = m;
+  cout << "Copiando matriz de " << n << " columnas y " << m << " filas." << endl;
   mat = new vector[m];
   for (int i = 0; i < m; i++) {
     mat[i] = vector(n);
+    cout << "Copiando fila " << i << " de " << m << endl;
   }
+  cout << "Terminé de copiar" << endl;
 }
 
 matriz::~matriz() {
-  // cout << "¡Han llamado al destructor de matrices! Quieren que elimine " << this << ": " << endl << *this << endl;
-/*  for(int i = 0; i < filas; i++) {
+  cout << "¡Han llamado al destructor de matrices! Quieren que elimine " << this << ": " << endl << *this << endl;
+  for(int i = 0; i < filas; i++) {
     ~vector(mat[i]);
   }
   if(mat != NULL) {
     ~vector(mat);
-  } */
+  }
 }
 
 int matriz::ancho() const {

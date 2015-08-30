@@ -22,7 +22,8 @@ int main(int argc, char* argv[]) {
     // Leo los datos desde el archivo de entrada
 
     ifstream infile;
-    infile.open(argv[1], ios::in);
+    // infile.open(argv[1], ios::in);
+    infile.open("minions.in", ios::in);
 
     double ri; //radio interno
     double re; //radio externo
@@ -40,7 +41,6 @@ int main(int argc, char* argv[]) {
     infile >> ninst;
 
     vector datos[ninst];
-
 
     for (int i = 0; i < ninst; i++) {
         datos[i] = vector(n * (m + 1));
@@ -106,11 +106,13 @@ int main(int argc, char* argv[]) {
     // Abro el archivo de salida
 
     ofstream outfile;
-    outfile.open(argv[2], ios::in);
+    // outfile.open(argv[2], ios::in);
+    outfile.open("minions.out", ios::in);
 
     // Aplico el algoritmo pedido
 
-    if (*(argv[3]) == '1') {
+    if ('0' == '1') {
+    // if (*(argv[3]) == '1') {
 
         // Factorización LU
 
@@ -126,7 +128,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-    } else if (*(argv[3]) == '0') {       
+    } else if ('0' == '0') {       
+    // } else if (*(argv[3]) == '0') {       
 
         // Eliminación gaussiana
 
@@ -146,5 +149,5 @@ int main(int argc, char* argv[]) {
 
     outfile.close();
 
-	return 0;
+    return 0;
 }
