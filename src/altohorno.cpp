@@ -25,9 +25,9 @@ int modulo (int a) {
     return res;
 }
 
-vector isotermaMenorDiferencia(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaMenorDiferencia(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    int h;
+    double h;
     int r;
     for (int j = 0; j < n; j++) {
         h = v[j];
@@ -43,9 +43,9 @@ vector isotermaMenorDiferencia(vector v, int iso, int n, int m, int re, int ri) 
     return res;
 }
 
-vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaPeligro(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    int h;
+    double h;
     int r; 
     for (int j = 0; j < n; j++) {
         h = v[(m + 1)*n - 1 - j];
@@ -61,10 +61,10 @@ vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
     return res;
 }
 
-vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaExactaCasi(vector v, double iso, int n, int m, double re, double ri) {
     // léase "Isoterma exacta... casi"
     vector res = vector(n);
-    int h;
+    double h;
     int r;
     for (int j = 0; j < n; j++) {
         h = v[(m + 1)*n - 1 - j];
