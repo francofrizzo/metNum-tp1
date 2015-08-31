@@ -47,12 +47,12 @@ vector isotermaPeligro(vector v, double iso, int n, int m, double re, double ri)
     vector res = vector(n);
     double h;
     int r; 
-    for (int j = 0; j < n; j++) {
-        h = v[(m + 1)*n - 1 - j];
+    for (int j = 1; j < n; j++) {
+        h = v[(m + 1)*n - j];
         r = m + 1;
-        for (int i = (m + 1)*n - 1; i >= 0; i = i - n) {
-            if (v[i - j] < iso) {
-                h = v[i - j];
+        for (int i = (m + 1)*n; i >= 0; i = i - n) {
+            if (v[i - j + 1] < iso) {
+                h = v[i - j + 1];
                 r = i / n;
             }
         }
