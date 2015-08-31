@@ -43,28 +43,28 @@ vector isotermaMenorDiferencia(vector v, double iso, int n, int m, double re, do
     return res;
 }
 
-vector isotermaPeligro(vector v, double iso, int n, int m, double re, double ri) {
+vector isotermaPeligro(vector temp, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    double h;
-    int r; 
-    for (int j = 1; j < n; j++) {
-        h = v[(m + 1)*n - j];
-        r = m + 1;
-        for (int i = (m + 1)*n; i >= 0; i = i - n) {
-            if (v[i - j + 1] < iso) {
-                h = v[i - j + 1];
-                r = i / n;
+    double deltaR = (re - ri) / m;
+    for (int j = 0; j < n; j++) {
+        res[j] = re;
+        for (int i = m; i >= 0; i--) {
+            int ind = hornoAMatriz(i, j, n);
+            if (temp[ind] > iso) {
+                res[j] = ri + deltaR * i;
+                break;
             }
         }
-        res[j] = ri + r * ((re - ri) / (m + 1));
     }
     return res;
 }
+
 
 vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
     double deltaR = (re - ri) / m;
     for (int j = 0; j < n; j++) {
+        res[j] = re;
         for (int i = m; i >= 0; i--) {
             int ind = hornoAMatriz(i, j, n);
             int indSig = hornoAMatriz(i + 1, j, n);
