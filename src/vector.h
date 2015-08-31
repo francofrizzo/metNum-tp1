@@ -17,6 +17,8 @@ class vector {
 
     ~vector();
 
+    vector& operator=(const vector&);
+
     int tamano() const;
     double& operator[](int i);
     double& operator[](int i) const;
