@@ -17,6 +17,76 @@ int hornoAMatriz(int j, int k, int n) {
     return j * n + (k % n);
 }
 
+int modulo (int a) {
+    int res = a;
+    if (a < 0){
+        res = -a;
+    }
+    return res;
+}
+
+vector isoterma(vector v, int iso, int n, int m, int re, int ri) {
+    vector res = vector(n);
+    int h;
+    int r;
+    for (int j = 0; j < n; j++) {
+        h = v[j];
+        r = 0;
+        for (int i = 0; i < (m + 1)*n - j; i + n) {
+            if (modulo(iso - v[i + j]) <= modulo(iso - h)) {
+                h = v[i + j];
+                r = i / n;
+            }
+        }
+        res [j] = ri + r * ((re - ri) / (m + 1));
+    }
+    return res;
+}
+
+vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
+    vector res = vector(n);
+    int h;
+    int r; 
+    for (int j = 0; j < n; j++) {
+        h = v[(m + 1)*n - 1 - j];
+        r = m + 1;
+        for (int i = (m + 1)*n - 1; i >= 0; i - n) {
+            if (v[i - j] < iso) {
+                h = v[i - j];
+                r = i / n;
+            }
+        }
+        res[j] = ri + r * ((re - ri) / (m + 1));
+    }
+    return res;
+}
+
+
+vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
+    vector res = vector(n);
+    int h;
+    int r;
+    for (int j = 0; j < n; j++) {
+        h = v[(m + 1)*n - 1 - j];
+        r = m + 1;
+        for (int i = (m + 1)*n - 1; i >= 0; i - n) {
+            if (v[i - j] < iso) {
+                h = v[i - j];
+                r = i / n;
+            }
+        }
+        res[j] = ri + r * ((re - ri) / (m + 1)) - ((v[r] - iso) / (v[r - 1] - v[r])) * ((re - ri) / (m + 1));
+    }
+    return res;
+}
+
+
+
+
+
+
+
+
 int main(int argc, char* argv[]) {
 
     // Leo los datos desde el archivo de entrada
