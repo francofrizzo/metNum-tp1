@@ -27,6 +27,9 @@
 *.out
 *.app
 
-## Sublime project files
+# Sublime project files
 *.sublime-project
 *.sublime-workspace
+
+# Compiled Python
+*.pyc
