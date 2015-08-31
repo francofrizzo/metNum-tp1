@@ -25,14 +25,14 @@ int modulo (int a) {
     return res;
 }
 
-vector isoterma(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaMenorDiferencia(vector v, int iso, int n, int m, int re, int ri) {
     vector res = vector(n);
     int h;
     int r;
     for (int j = 0; j < n; j++) {
         h = v[j];
         r = 0;
-        for (int i = 0; i < (m + 1)*n - j; i + n) {
+        for (int i = 0; i < (m + 1)*n - j; i = i + n) {
             if (modulo(iso - v[i + j]) <= modulo(iso - h)) {
                 h = v[i + j];
                 r = i / n;
@@ -50,7 +50,7 @@ vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
     for (int j = 0; j < n; j++) {
         h = v[(m + 1)*n - 1 - j];
         r = m + 1;
-        for (int i = (m + 1)*n - 1; i >= 0; i - n) {
+        for (int i = (m + 1)*n - 1; i >= 0; i = i - n) {
             if (v[i - j] < iso) {
                 h = v[i - j];
                 r = i / n;
@@ -61,7 +61,6 @@ vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
     return res;
 }
 
-
 vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
     // léase "Isoterma exacta... casi"
     vector res = vector(n);
@@ -70,7 +69,7 @@ vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
     for (int j = 0; j < n; j++) {
         h = v[(m + 1)*n - 1 - j];
         r = m + 1;
-        for (int i = (m + 1)*n - 1; i >= 0; i - n) {
+        for (int i = (m + 1)*n - 1; i >= 0; i = i - n) {
             if (v[i - j] < iso) {
                 h = v[i - j];
                 r = i / n;
@@ -80,6 +79,7 @@ vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
     }
     return res;
 }
+
 
 
 int main(int argc, char* argv[]) {
@@ -179,10 +179,21 @@ int main(int argc, char* argv[]) {
     outfile.open(argv[2], ios::out);
     // outfile.open("minions.out", ios::in);
 
+    // Reviso si quieren la isoterma
+
+    ofstream isofile;
+    bool pidieronIsoterma = argc > 5;
+    char isoModo;
+    if (pidieronIsoterma) {
+        isofile.open(argv[4], ios::out);
+        isoModo = *(argv[5]);
+    }
+
     // Aplico el algoritmo pedido
 
     // if ('1' == '1') {
-    if (*(argv[3]) == '1') {
+    char algoritmo = *(argv[3]);
+    if (algoritmo == '1') {
 
         // Factorización LU
 
@@ -192,14 +203,30 @@ int main(int argc, char* argv[]) {
             vector res = mat.solucionLU(datos[i]);
 
             // Imprimo los resultados            
-
             for (int j = 0; j < res.tamano(); j++) {
                 outfile << fixed << setprecision(6) << res[j] << endl;
+            }
+
+            // Calculo la isoterma
+            if (pidieronIsoterma) {
+                vector isoterma;
+                if (isoModo == '0') {
+                    isoterma = isotermaMenorDiferencia(res, iso, n, m, re, ri);
+                } else if (isoModo == '1') {
+                    isoterma = isotermaPeligro(res, iso, n, m, re, ri);
+                } else if (isoModo == '2') {
+                    isoterma = isotermaExactaCasi(res, iso, n, m, re, ri);
+                }
+
+                // Imprimo la isoterma            
+                for (int j = 0; j < isoterma.tamano(); j++) {
+                    isofile << fixed << setprecision(6) << isoterma[j] << endl;
+                }
             }
         }
 
     // } else if ('1' == '0') {       
-    } else if (*(argv[3]) == '0') {       
+    } else if (algoritmo == '0') {       
 
         // Eliminación gaussiana
 
@@ -208,16 +235,35 @@ int main(int argc, char* argv[]) {
             vector res = matCopia.eliminacionGaussiana(datos[i]);
 
             // Imprimo los resultados
-
             for (int j = 0; j < res.tamano(); j++) {
                 outfile << fixed << setprecision(6) << res[j] << endl;
+            }
+
+            // Calculo la isoterma
+            if (pidieronIsoterma) {
+                vector isoterma;
+                if (isoModo == '0') {
+                    isoterma = isotermaMenorDiferencia(res, iso, n, m, re, ri);
+                } else if (isoModo == '1') {
+                    isoterma = isotermaPeligro(res, iso, n, m, re, ri);
+                } else if (isoModo == '2') {
+                    isoterma = isotermaExactaCasi(res, iso, n, m, re, ri);
+                }
+
+                // Imprimo la isoterma            
+                for (int j = 0; j < isoterma.tamano(); j++) {
+                    isofile << fixed << setprecision(6) << isoterma[j] << endl;
+                }
             }
         }
     }
 
+    if (argv)
+
     // Cierro el archivo de salida
 
     outfile.close();
+    isofile.close();
 
     return 0;
 }
