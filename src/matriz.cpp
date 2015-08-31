@@ -83,7 +83,7 @@ void matriz::factorizacionLU() {
     int n = ancho();
     for (int j = 0; j < n; j++) {
       for (int i = j + 1; i < n; i++) {
-        int m = mat[i][j] / mat[j][j];
+        double m = mat[i][j] / mat[j][j];
         mat[i][j] =  m;
         for (int k = j + 1; k < n; k++) {
           mat[i][k] = mat[i][k] - m * mat[j][k];
@@ -96,18 +96,8 @@ void matriz::factorizacionLU() {
 }
 
 vector matriz::solucionLU(vector& b) const {
-  // obtenemos y = L^(-1) * b
-  vector y = sustHaciaAdelanteConUnos(b);
-  // resolvemos U * x = y
-  // int n = ancho();
-  // vector auxb = vector(n);
-  // for (int i = 0; i < n; i++) {
-  //   auxb[i] = b[i];
-  //   for (int j = 0; j < i; j++){
-  //     auxb[i] = auxb[i] + mat[i][j] * b[j];
-  //   }
-  // }
-  return sustHaciaAtras(y);
+  vector y = sustHaciaAdelanteConUnos(b); // obtenemos y = L^(-1) * b
+  return sustHaciaAtras(y); // resolvemos U * x = y
 }
 
 vector matriz::sustHaciaAtras(vector& b) const {
@@ -141,6 +131,9 @@ vector matriz::sustHaciaAdelante(vector& b) const {
 }
 
 vector matriz::sustHaciaAdelanteConUnos(vector& b) const {
+  // Esta función hace sustitución hacia adelante,
+  // pero ignora los elementos de la diagonal y considera
+  // que esta tiene solamente unos.
   int n = ancho();
   vector res = vector(n);
 
@@ -150,7 +143,7 @@ vector matriz::sustHaciaAdelanteConUnos(vector& b) const {
       suma = suma + mat[i][j] * res[j];
     }
     suma = suma + res[i];
-    res[i] = (b[i] - suma) / mat[i][i];
+    res[i] = (b[i] - suma);
   }
 
   return res;
@@ -162,7 +155,7 @@ std::ostream& operator<<(std::ostream& os, const matriz& mat) {
   int ancho = mat.ancho();
   for (int i = 0; i < alto; i++) {
     if (i > 0) {
-      cout << endl;
+      os << endl;
     }
     for (int j = 0; j < ancho; j++) {
       os << setfill(' ') << setw(12) << mat[i][j] << " ";

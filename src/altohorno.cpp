@@ -63,6 +63,7 @@ vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
 
 
 vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
+    // léase "Isoterma exacta... casi"
     vector res = vector(n);
     int h;
     int r;
@@ -79,12 +80,6 @@ vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
     }
     return res;
 }
-
-
-
-
-
-
 
 
 int main(int argc, char* argv[]) {
@@ -181,7 +176,7 @@ int main(int argc, char* argv[]) {
     // Abro el archivo de salida
 
     ofstream outfile;
-    outfile.open(argv[2], ios::in);
+    outfile.open(argv[2], ios::out);
     // outfile.open("minions.out", ios::in);
 
     // Aplico el algoritmo pedido
