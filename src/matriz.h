@@ -30,6 +30,8 @@ class matriz {
 
     vector eliminacionGaussiana(vector& b);
     vector sustHaciaAtras(vector& b) const;
+    vector sustHaciaAdelante(vector& b) const;
+    vector sustHaciaAdelanteConUnos(vector& b) const;
     void factorizacionLU();
     vector solucionLU(vector& b) const;
 };
