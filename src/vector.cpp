@@ -14,17 +14,16 @@ vector::vector(const vector& o) {
 }
 
 vector::vector(int n) {
-    cout << "Creando vector de tamaño " << n << endl;
+    // cout << "Creando vector de tamaño " << n << endl;
     tam = n;
     vec = new double[n];
     for (int i = 0; i < n; i++) {
         vec[i] = 0;
     }
-    cout << "Vector creado ✓" << endl;
 }
 
 vector::~vector() {
-    cout << "Destruyendo vector " << this << ": " << *this << endl;
+    // cout << "Destruyendo vector " << this << ": " << *this << endl;
     if (vec != NULL) {
         delete[] vec;
     }

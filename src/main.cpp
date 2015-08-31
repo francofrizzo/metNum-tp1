@@ -14,11 +14,9 @@ int main(int argc, char* argv[]) {
 
     cout << v << endl;
 
-    matriz m = matriz(2,2);
+    matriz m = matriz(900,900);
 
     m[0][0] = 2.5;
-
-    cout << m << endl;
 
     return 0;
 }

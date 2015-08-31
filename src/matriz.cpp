@@ -9,35 +9,30 @@ matriz::matriz() {
 matriz::matriz(const matriz& o) {
   columnas = o.columnas;
   filas = o.filas;
-  cout << "Copiando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
+  // cout << "Copiando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
   mat = new vector[filas];
   for (int i = 0; i < filas; i++) {
     mat[i] = vector(o.mat[i]);
-    cout << "Copiando fila " << i << " de " << columnas << endl;
+    // cout << "Copiando fila " << i << " de " << columnas << endl;
   }
-  cout << "Terminé de copiar" << endl;
+  // cout << "Terminé de copiar" << endl;
 }
 
 matriz::matriz(int n, int m){
   columnas = n;
   filas = m;
-  cout << "Creando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
-  mat = new vector[2];
-  mat[0] = vector(n);
-  mat[1] = vector(n);
-  // for (int i = 0; i < m; i++) {
-  //   mat[i] = vector(n);
-  // }
+  // cout << "Creando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
+  mat = new vector[m];
+  for (int i = 0; i < m; i++) {
+    mat[i] = vector(n);
+  }
 }
 
 matriz::~matriz() {
-  cout << "Destruyendo matriz " << this << ": " << endl << *this << endl;
-  // for(int i = 0; i < filas; i++) {
-  //   ~vector(mat[i]);
-  // }
-  // if(mat != NULL) {
-  //   ~vector(mat);
-  // }
+  // cout << "Destruyendo matriz " << this << ": " << endl << *this << endl;
+  if (mat != NULL) {
+      delete[] mat;
+  }
 }
 
 int matriz::ancho() const {
