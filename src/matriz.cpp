@@ -9,31 +9,29 @@ matriz::matriz() {
 matriz::matriz(const matriz& o) {
   columnas = o.columnas;
   filas = o.filas;
+  // cout << "Copiando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
   mat = new vector[filas];
   for (int i = 0; i < filas; i++) {
     mat[i] = vector(o.mat[i]);
+    // cout << "Copiando fila " << i << " de " << columnas << endl;
   }
+  // cout << "Terminé de copiar" << endl;
 }
 
 matriz::matriz(int n, int m){
   columnas = n;
   filas = m;
-  cout << "Copiando matriz de " << n << " columnas y " << m << " filas." << endl;
+  // cout << "Creando matriz de " << columnas << " columnas y " << filas << " filas." << endl;
   mat = new vector[m];
   for (int i = 0; i < m; i++) {
     mat[i] = vector(n);
-    cout << "Copiando fila " << i << " de " << m << endl;
   }
-  cout << "Terminé de copiar" << endl;
 }
 
 matriz::~matriz() {
-  cout << "¡Han llamado al destructor de matrices! Quieren que elimine " << this << ": " << endl << *this << endl;
-  for(int i = 0; i < filas; i++) {
-    ~vector(mat[i]);
-  }
-  if(mat != NULL) {
-    ~vector(mat);
+  // cout << "Destruyendo matriz " << this << ": " << endl << *this << endl;
+  if (mat != NULL) {
+      delete[] mat;
   }
 }
 
@@ -52,7 +50,6 @@ bool matriz::esCuadrada() {
 vector& matriz::operator[](int i) {
   return mat[i];
 }
-
 
 vector& matriz::operator[](int i) const {
   return mat[i];
@@ -111,8 +108,6 @@ vector matriz::solucionLU(vector& b) const {
   return sustHaciaAtras(auxb);
 }
 
-
-
 vector matriz::sustHaciaAtras(vector& b) const {
   int n = ancho();
   vector res = vector(n);
@@ -129,11 +124,15 @@ vector matriz::sustHaciaAtras(vector& b) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const matriz& mat) {
-  for (int i = 0; i < mat.alto(); i++) {
-    for (int j = 0; j < mat.alto(); j++) {
+  int alto = mat.alto();
+  int ancho = mat.ancho();
+  for (int i = 0; i < alto; i++) {
+    if (i > 0) {
+      cout << endl;
+    }
+    for (int j = 0; j < ancho; j++) {
       os << setfill(' ') << setw(12) << mat[i][j] << " ";
     }
-    os << endl;
   }
   return os;
 }

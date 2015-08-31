@@ -14,6 +14,7 @@ vector::vector(const vector& o) {
 }
 
 vector::vector(int n) {
+    // cout << "Creando vector de tamaño " << n << endl;
     tam = n;
     vec = new double[n];
     for (int i = 0; i < n; i++) {
@@ -22,10 +23,23 @@ vector::vector(int n) {
 }
 
 vector::~vector() {
-    // cout << "¡Han llamado al destructor de vectores! Quieren que elimine " << this << ": " << *this << endl;
-    // if (vec != NULL) {
-    //     delete[] vec;
-    // }
+    // cout << "Destruyendo vector " << this << ": " << *this << endl;
+    if (vec != NULL) {
+        delete[] vec;
+    }
+}
+
+vector& vector::operator=(const vector& o) {
+    if (this != &o) {
+        tam = o.tam;
+        vec = NULL;
+
+        vec = new double[tam];
+        for (int i = 0; i < tam; i++) {
+            vec[i] = o.vec[i];
+        }
+    }
+    return *this;
 }
 
 int vector::tamano() const{
@@ -49,6 +63,6 @@ std::ostream& operator<<(std::ostream& os, const vector& vec) {
     if (vec.tamano() > 0) {
         os << vec[vec.tamano() - 1];
     }
-    os << "]" << endl;
+    os << "]";
     return os;
 }
