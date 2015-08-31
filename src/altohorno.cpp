@@ -25,9 +25,9 @@ int modulo (int a) {
     return res;
 }
 
-vector isotermaMenorDiferencia(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaMenorDiferencia(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    int h;
+    double h;
     int r;
     for (int j = 0; j < n; j++) {
         h = v[j];
@@ -43,9 +43,9 @@ vector isotermaMenorDiferencia(vector v, int iso, int n, int m, int re, int ri) 
     return res;
 }
 
-vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
+vector isotermaPeligro(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    int h;
+    double h;
     int r; 
     for (int j = 0; j < n; j++) {
         h = v[(m + 1)*n - 1 - j];
@@ -61,25 +61,21 @@ vector isotermaPeligro(vector v, int iso, int n, int m, int re, int ri) {
     return res;
 }
 
-vector isotermaExactaCasi(vector v, int iso, int n, int m, int re, int ri) {
-    // léase "Isoterma exacta... casi"
+vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
-    int h;
-    int r;
+    double deltaR = (re - ri) / m;
     for (int j = 0; j < n; j++) {
-        h = v[(m + 1)*n - 1 - j];
-        r = m + 1;
-        for (int i = (m + 1)*n - 1; i >= 0; i = i - n) {
-            if (v[i - j] < iso) {
-                h = v[i - j];
-                r = i / n;
+        for (int i = m; i >= 0; i--) {
+            int ind = hornoAMatriz(i, j, n);
+            int indSig = hornoAMatriz(i + 1, j, n);
+            if (temp[ind] > iso) {
+                res[j] = ri + deltaR * (i + (iso - temp[ind])/(temp[indSig] - temp[ind]));
+                break;
             }
         }
-        res[j] = ri + r * ((re - ri) / (m + 1)) - ((v[r] - iso) / (v[r - 1] - v[r])) * ((re - ri) / (m + 1));
     }
     return res;
 }
-
 
 
 int main(int argc, char* argv[]) {
@@ -215,7 +211,7 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '1') {
                     isoterma = isotermaPeligro(res, iso, n, m, re, ri);
                 } else if (isoModo == '2') {
-                    isoterma = isotermaExactaCasi(res, iso, n, m, re, ri);
+                    isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
 
                 // Imprimo la isoterma            
@@ -247,7 +243,7 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '1') {
                     isoterma = isotermaPeligro(res, iso, n, m, re, ri);
                 } else if (isoModo == '2') {
-                    isoterma = isotermaExactaCasi(res, iso, n, m, re, ri);
+                    isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
 
                 // Imprimo la isoterma            
