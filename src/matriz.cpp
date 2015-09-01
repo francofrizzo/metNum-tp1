@@ -47,6 +47,37 @@ bool matriz::esCuadrada() {
   return (columnas == filas);
 }
 
+bool matriz::esDiagDomin() {
+  if (esCuadrada()) {
+    for (int i = 0; i < filas; i++) {
+      double suma = 0;
+      for (int j = 0; j < columnas; j++) {
+        if (i != j) {
+          float val = mat[i][j];
+          if (val < 0) {
+            suma = suma - val;
+          } else {
+            suma = suma + val;
+          }
+        }
+        float diag = mat[i][i];
+        if (diag < 0) {
+          diag = - diag;
+        }
+        if (diag < suma) {
+          cout << "La matriz no es diagonal dominante. En fila " << i << " abs diagonal: " << std::fixed << std::setprecision(10) << diag << ", abs otros: " << std::fixed << std::setprecision(10) << suma << "." << endl;
+          return false;
+        }
+      }
+    }
+    cout << "La matriz es diagonal dominante." << endl;
+    return true;
+  } else {
+    cout << "Error: La matriz no es cuadrada." << endl;
+    return false;
+  }
+}
+
 vector& matriz::operator[](int i) {
   return mat[i];
 }

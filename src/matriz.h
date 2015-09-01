@@ -25,6 +25,7 @@ class matriz {
     int ancho() const;
     int alto() const;
     bool esCuadrada();
+    bool esDiagDomin();
     vector& operator[](int i);
     vector& operator[](int i) const;
 

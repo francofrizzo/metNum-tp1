@@ -1,6 +1,7 @@
 #include "./matriz.h"
 #include <iostream>
 #include <fstream>
+// #include <time.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -17,7 +18,7 @@ int hornoAMatriz(int j, int k, int n) {
     return j * n + (k % n);
 }
 
-int modulo (int a) {
+int modulo(int a) {
     int res = a;
     if (a < 0){
         res = -a;
@@ -59,17 +60,16 @@ vector isotermaPeligro(vector temp, double iso, int n, int m, double re, double 
     return res;
 }
 
-
-vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, double ri) {
+vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, double ri) { // Revisar casos borde
     vector res = vector(n);
     double deltaR = (re - ri) / m;
     for (int j = 0; j < n; j++) {
         res[j] = re;
         for (int i = m; i >= 0; i--) {
-            int ind = hornoAMatriz(i, j, n);
-            int indSig = hornoAMatriz(i + 1, j, n);
-            if (temp[ind] > iso) {
-                res[j] = ri + deltaR * (i + (iso - temp[ind])/(temp[indSig] - temp[ind]));
+            int ind1 = hornoAMatriz(i, j, n);
+            int ind2 = hornoAMatriz(i + 1, j, n);
+            if (temp[ind2] > iso) {
+                res[j] = ri + deltaR * (i + (iso - temp[ind1])/(temp[ind2] - temp[ind1]));
                 break;
             }
         }
@@ -187,7 +187,6 @@ int main(int argc, char* argv[]) {
 
     // Aplico el algoritmo pedido
 
-    // if ('1' == '1') {
     char algoritmo = *(argv[3]);
     if (algoritmo == '1') {
 
@@ -228,7 +227,11 @@ int main(int argc, char* argv[]) {
 
         for (int i = 0; i < ninst; i++) {
             matriz matCopia = matriz(mat);
+            
+            // mat.esDiagDomin(); // CHEQUEO
+
             vector res = matCopia.eliminacionGaussiana(datos[i]);
+
 
             // Imprimo los resultados
             for (int j = 0; j < res.tamano(); j++) {
