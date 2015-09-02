@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-Wall -Wextra -pedantic -ggdb -c
+CPPFLAGS=-Wall -Wextra -pedantic -ggdb -c -std=c++11
 DEP=vector.o matriz.o
 
 all: altohorno
@@ -7,8 +7,8 @@ all: altohorno
 altohorno: altohorno.o $(DEP)
 	$(CC) altohorno.o $(DEP) -o altohorno
 
-main: main.o $(DEP)
-	$(CC) main.o $(DEP) -o main
+main: main.o 
+	$(CC) main.o -o main
 
 %.o: %.cpp
 	$(CC) $(CPPFLAGS) $< -o $@
