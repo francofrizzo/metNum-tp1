@@ -190,7 +190,7 @@
   \begin{proof}
     Lo haremos por inducción en $u$. 
     \begin{itemize}
-      \item[\textbf{C.B.}] Teniendo en cuenta que $A_{1, 1} \neq 0$ (ver Observación \ref{obs:Diagonal de A sin ceros}), se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
+      \item[\textbf{C.B.}] Teniendo en cuenta que la primera fila de la matriz $A$ tiene necesariamente un $1$ en la diagonal y $0$ en las demás posiciones, se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo, dado que $A_{1, 1}$ es no nulo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
           
       \item[\textbf{P.I.}] Supongamos que la matriz $A^{(u - 1)}$, obtenida tras aplicar $u - 1$ pasos de Eliminación Gaussiana sobre $A$, es diagonal dominante, con su $u$-ésima fila no nula. Esto implica que $A^{(u - 1)}_{u,u} \neq 0$. Notemos que podemos escribir a $A^{(u - 1)}$ por bloques de la siguiente manera
         \[ A^{(u - 1)} = \left( \begin{matrix} U_{u - 1} & B \\ 0 & \widetilde{A}_{u - 1} \end{matrix} \right) \]
@@ -205,6 +205,13 @@
       \end{itemize}
     \end{itemize}
   \end{proof}
+
+Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante. 
+
+Para calcular la isoterma, al ser  una función discretizada puede no tomar en ninguno de los valores observables el valor exacto de la isoterma a calcular. Para decidir por donde pasara la isoterma lo que vamos a hacer es tomar los dos valores entre los que sabemos  que se encuentra y suponer que entre estos dos radios la temperatura se mueve linealmente. Para ello dividimos la distancia de los radios a tener en cuenta por la diferencia entre las temperaturas que estamos mirando. A esto le multiplicamos la diferencia de la isoterma con el valor mas cercano al borde interno. Ahora calculamos la distancia desde el centro hasta el radio mas cercano al externo y le restamos la diferencia entre 1 y el valor previamente calculado. 
+Otras opciones que planteamos fueron tomar de los dos valores el mas próximo al valor de la isoterma y el segundo quedarnos con el mas próximo a la pared externa. Para ello calculamos la diferencia en modulo entre cada uno de los dos puntos en cuestión  con el valor de la isoterma y nos quedamos con el que de un resultado menor.
+El segundo caso marcaba un mayor valor en el radio mas cercano a la pared externa que el que realmente tenía (ya que la isoterma tiene un valor mayor a este por ser mas próxima al radio interno). Esto hacia que en caso de correr el riesgo de que el alto horno colapse, seguro que iba a ser visible.
+La aproximación del caso elegido nos pareció la mas correcta ya que suponer que la temperatura es lineal entre dos radios es un punto medio entre las opciones descartadas. En los otros casos podemos tomar un valor y que en realidad la isoterma pase por el otro. Con el método elegido siempre quedamos en un punto medio de cuando nos acercamos o nos alejamos mucho del valor real por los otros casos.
 
 \section{Resultados}
 
