@@ -1,7 +1,7 @@
 #include "./matriz.h"
 #include <iostream>
 #include <fstream>
-// #include <time.h>
+#include <time.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -78,14 +78,16 @@ vector isotermaPeligro(vector temp, double iso, int n, int m, double re, double 
 vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, double ri) { // Revisar casos borde
     vector res = vector(n);
     double deltaR = (re - ri) / m;
-    for (int j = 0; j < n; j++) {
-        res[j] = re;
-        for (int i = m; i >= 0; i--) {
-            int ind1 = hornoAMatriz(i, j, n);
-            int ind2 = hornoAMatriz(i + 1, j, n);
-            if (temp[ind2] > iso) {
-                res[j] = ri + deltaR * (i + (iso - temp[ind1])/(temp[ind2] - temp[ind1]));
-                break;
+    for (int k = 0; k < n; k++) {
+        res[k] = re;
+        if (temp[hornoAMatriz(m, k, n)] < iso) {
+            for (int j = m - 1; j >= 0; j--) {
+                int ind1 = hornoAMatriz(j, k, n);
+                int ind2 = hornoAMatriz(j + 1, k, n);
+                if (temp[ind1] >= iso) {
+                    res[k] = ri + deltaR * (j + (iso - temp[ind1])/(temp[ind2] - temp[ind1]));
+                    break;
+                }
             }
         }
     }
