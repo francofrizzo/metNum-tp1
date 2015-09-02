@@ -1,6 +1,7 @@
 #include "./matriz.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <time.h>
 
 #define M_PI 3.14159265358979323846
@@ -37,9 +38,6 @@ double peligrosidad(vector iso, double re) {
     return res / re;
 
 }
-
-
-
 
 vector isotermaMenorDiferencia(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
@@ -94,14 +92,12 @@ vector isotermaCasiExacta(vector temp, double iso, int n, int m, double re, doub
     return res;
 }
 
-
 int main(int argc, char* argv[]) {
 
     // Leo los datos desde el archivo de entrada
 
     ifstream infile;
     infile.open(argv[1], ios::in);
-    // infile.open("minions.in", ios::in);
 
     if (argc < 4) {
         cout << "Error: Faltan argumentos" << endl;
@@ -192,22 +188,39 @@ int main(int argc, char* argv[]) {
     outfile.open(argv[2], ios::out);
     // outfile.open("minions.out", ios::in);
 
-    // Reviso si quieren la isoterma
+    // Reviso si quieren la isoterma y el tiempo
 
     ofstream isofile;
-    bool pidieronIsoterma = argc > 5;
+    bool pidieronIsoterma = false;
+    bool pidieronTiempo = false;
     char isoModo;
-    if (pidieronIsoterma) {
-        isofile.open(argv[4], ios::out);
-        isoModo = *(argv[5]);
+
+    if (argc > 4) {
+        if (argv[4] == string("-t")) {
+            pidieronTiempo = true;
+            if (argc > 6) {
+                pidieronIsoterma = true;
+                isofile.open(argv[4], ios::out);
+                isoModo = *(argv[5]);
+            }
+        } else {
+            if (argc > 5) {
+                pidieronIsoterma = true;
+                isofile.open(argv[4], ios::out);
+                isoModo = *(argv[5]);
+            }
+        }
     }
 
     // Aplico el algoritmo pedido
 
+    clock_t t;
     char algoritmo = *(argv[3]);
     if (algoritmo == '1') {
 
         // Factorización LU
+
+        t = clock();
 
         mat.factorizacionLU();
 
@@ -229,22 +242,28 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
-                double indiceDePeligro = peligrosidad(isoterma, re);
-                cout << "indice de peligrosidad:" << indiceDePeligro << endl;
+                cout << "Ïndice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {
                     isofile << fixed << setprecision(6) << isoterma[j] << endl;
                 }
-
-                //isofile << fixed << setprecision(6) << indiceDePeligro << endl;
             }
         }
 
+        t = clock() - t;
 
-    // } else if ('1' == '0') {       
+        if (pidieronTiempo) {
+            cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
+            ofstream timefile;
+            timefile.open("tiempos.out", ios::app);
+            timefile << m << " " << n << " " << ninst << " " << t << endl;
+        }
+
     } else if (algoritmo == '0') {       
 
         // Eliminación gaussiana
+
+        t = clock();
 
         for (int i = 0; i < ninst; i++) {
             matriz matCopia = matriz(mat);
@@ -269,8 +288,7 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
-                double indiceDePeligro = peligrosidad(isoterma, re);
-                cout << "indice de peligrosidad:" << indiceDePeligro << endl;
+                cout << "Ïndice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
 
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {
@@ -278,9 +296,16 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-    }
 
-    if (argv)
+        t = clock() - t;
+
+        if (pidieronTiempo) {
+            cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
+            ofstream timefile;
+            timefile.open("tiempos.out", ios::app);
+            timefile << m << " " << n << " " << ninst << " " << t << endl;
+        }
+    }
 
     // Cierro el archivo de salida
 
