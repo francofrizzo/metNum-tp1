@@ -25,11 +25,20 @@
 \usepackage[pdftex]{graphicx} % Imágenes
 \usepackage{caratula} % Carátula del DC
 
+% Bibliografía
+\usepackage{biblatex}
+\addbibresource{referencias.bib}
+
 % Comandos personalizados
 \let\strong\textbf
 \renewcommand{\appendixtocname}{Apéndices}
 \renewcommand{\appendixpagename}{Apéndices}
-\newtheorem{prop}{Proposición}
+\theoremstyle{plain}
+  \newtheorem{prop}{Proposición}
+  \newtheorem{lema}{Lema}
+\theoremstyle{remark}
+  \newtheorem{obs}{Observación}
+\setlength{\parskip}{.3em}
 
 % Encabezado
 \lhead{Métodos Numéricos}
@@ -104,9 +113,11 @@
 
   Dados los parámetros de entrada, creamos una matriz asociada al sistema relacionando cada uno de los puntos del dominio con sus vecinos a través de la ecuación de Laplace.
 
-  Así formamos una matriz diagonal dominante, lo que nos permite asegurarnos que el método de eliminación gaussiana se va a poder llevar a cabo sin necesidad de intercambiar filas, es decir, sin pivoteo.
+  % Así formamos una matriz diagonal dominante, lo que nos permite asegurarnos que el método de eliminación gaussiana se va a poder llevar a cabo sin necesidad de intercambiar filas, es decir, sin pivoteo.
 
-  Notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
+  Para poder utilizar los métodos elegidos para resolver el problema, necesitamos asegurarnos de que estos son aplicables en este caso en particular. Bastará con asegurarnos de poder aplicar Eliminación Gaussiana sin pivoteo, ya que esto implica que también podremos calcular la factorización LU de la matriz del sistema.\cite[p.~403]{burden}
+
+  En primer lugar, notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
 
   \begin{itemize}
 
@@ -141,8 +152,59 @@
   \end{itemize}
 
   De lo anterior, se sigue que
-    \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $1 \leq p \leq (m+1)n$} \]
+    \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $p = 1, \dots, (m+1)n$} \]
   es decir, $A$ es diagonal dominante de forma no estricta.
+
+  \begin{obs}
+    \label{obs:Diagonal de A sin ceros}
+    Para todo $p = 1, \dots, (m+1)n$, $\vert A_{p,p} \vert > 0$, i.e. la diagonal de $A$ no contiene ceros.
+  \end{obs}
+
+  A continuación, probaremos un resultado que nos será útil: al realizar el primer paso de Eliminación Gaussiana sobre una matriz diagonal dominante, la matriz resultante también lo es.
+
+  \begin{lema}
+    \label{lema:EG conserva diagonal dominante}
+    Sea $A^{(0)} = A \in \mathbb{R}^{n \times n}$ una matriz diagonal dominante, y $A^{(1)}$ el resultado de aplicar un paso de Eliminación Gaussiana (sin pivoteo) sobre $A$. Entonces $A^{(1)}$ es diagonal dominante.
+  \end{lema}
+  \begin{proof}
+    Consideremos la fila $i$-ésima de $A^{(1)}$, y veamos que $\left \vert A^{(1)}_{i,i} \right \vert \geq \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert$. Tenemos que
+    \[ \left \vert A^{(1)}_{i,i} \right \vert = \left \vert A_{i,i} - \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert
+      \qquad \text{y} \qquad
+    \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+      = \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \]
+
+    Luego,
+
+    \[ \begin{split}
+      \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+      &= \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \\
+      &\leq \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{i,j} \vert + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{1,j} \vert \\
+      &\leq \left( \vert A_{i,i} \vert - \vert A_{i,1} \vert \right) + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \left( \vert A_{1,1} \vert - \vert A_{1,i} \vert \right) \\
+      &= \vert A_{i,i} \vert - \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \vert A_{1,i} \vert \\
+      &\leq \left \vert A_{i,i} -  \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert = \left \vert A^{(1)}_{i,i} \right \vert
+    \end{split} \]
+  \end{proof}
+
+  Consideremos de nuevo la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ correspondiente al sistema estudiado. Probemos ahora que es posible aplicar Eliminación Gaussiana sin pivoteo. Más especificamente, probaremos que para $u \leq (m+1)n$, es posible realizar $u$ iteraciones de Eliminación Gaussiana sobre $A$ sin pivoteo, y que luego de las mismas, la matriz $A^{(u)}$ resultante es diagonal dominante, con su fila $u + 1$ no nula.
+
+  \begin{proof}
+    Lo haremos por inducción en $u$. 
+    \begin{itemize}
+      \item[\textbf{C.B.}] Teniendo en cuenta que $A_{1, 1} \neq 0$ (ver Observación \ref{obs:Diagonal de A sin ceros}), se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
+          
+      \item[\textbf{P.I.}] Supongamos que la matriz $A^{(u - 1)}$, obtenida tras aplicar $u - 1$ pasos de Eliminación Gaussiana sobre $A$, es diagonal dominante, con su $u$-ésima fila no nula. Esto implica que $A^{(u - 1)}_{u,u} \neq 0$. Notemos que podemos escribir a $A^{(u - 1)}$ por bloques de la siguiente manera
+        \[ A^{(u - 1)} = \left( \begin{matrix} U_{u - 1} & B \\ 0 & \widetilde{A}_{u - 1} \end{matrix} \right) \]
+      donde las matrices $U_{u - 1} \in \mathbb{R}^{(u-1)\times(u-1)}$ y $\widetilde{A}_{u - 1} \in \mathbb{R}^{(n-u+1)\times(n-u+1)}$ son trivialmente diagonal dominantes.
+
+      Podemos ver que realizar el paso $u$-ésimo del algoritmo de Eliminación Gaussiana sobre $A$ equivale a realizar el primer paso de este algoritmo sobre $\widetilde{A}_{u - 1}$, sin modificar el resto de la matriz. Dado que $A^{(u - 1)}_{u,u} \neq 0$, podremos realizar esto sin pivoteo, y del Lema 1 se sigue que el resultado de este proceso será diagonal dominante, lo cual implica directamente que también lo será $A^{(u)}$.
+
+      Por último, probemos que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula.
+      \begin{itemize}
+        \item Si $1 \leq u + 1 \leq n$ o $mn < u + 1 \leq (m+1)n$, tendremos que la fila $u + 1$ tendrá un $1$ en la diagonal y $0$ en las demás posiciones, por lo que no se verá afectada por el algoritmo de Eliminación Gaussiana. Luego $A^{(u)}_{u+1,u+1} = 1$.
+        \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es banda $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar.
+      \end{itemize}
+    \end{itemize}
+  \end{proof}
 
 \section{Resultados}
 
@@ -164,7 +226,7 @@
   \begin{itemize}
     \item Incluso podemos hacer
     \item listas con viñetas
-    \item ¡que incluyan referencias a la bibliografía! ¡Sí! \cite{nosPodemosCopiarSiLoCitamos}
+    \item :D
   \end{itemize}
 
 \newpage
@@ -270,7 +332,7 @@
       Finalmente, se deberá presentar un informe que incluya una descripción detallada de los métodos implementados y las decisiones tomadas, el método propuesto para el cálculo de la isoterma buscada y los experimentos realizados, junto con el correspondiente análisis y siguiendo las pautas definidas en el archivo \texttt{pautas.pdf}.
 
     \subsection{Programa y formato de archivos}
-      Se deberán entregar los archivos fuentes que contengan la resolución del trabajo práctico. El ejecutable tomará tres parámetros por línea de comando, que serán el archivo de entrada, el archivo de salida, y el método a ejectutar (0 EG, 1 LU).
+      Se deberán entregar los archivos fuentes que contengan la resolución del trabajo práctico. El ejecutable tomará tres parámetros por línea de comando, que serán el archivo de entrada, el archivo de salida, y el método a ejectutar (0 Eliminación Gaussiana, 1 LU).
 
       El archivo de entrada tendrá la siguiente estructura:
       \begin{itemize}
@@ -313,11 +375,10 @@
 \end{appendices}
 
 \newpage
-\begin{thebibliography}{1}
 
-  \bibitem{referencias} Es importante incluir referencias a libros, artículos y páginas de Internet consultados durante el desarrollo del trabajo, haciendo referencia a estos materiales a lo largo del informe.
-  \bibitem{nosPodemosCopiarSiLoCitamos} Se deben citar también las comunicaciones personales con otros grupos.
+\printbibliography[heading=bibintoc]
 
-\end{thebibliography}
+  Es importante incluir referencias a libros, artículos y páginas de Internet consultados durante el desarrollo del trabajo, haciendo referencia a estos materiales a lo largo del informe.
+  Se deben citar también las comunicaciones personales con otros grupos.
 
 \end{document}
