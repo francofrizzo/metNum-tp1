@@ -236,7 +236,6 @@ int main(int argc, char* argv[]) {
                     isofile << fixed << setprecision(6) << isoterma[j] << endl;
                 }
 
-                //isofile << fixed << setprecision(6) << indiceDePeligro << endl;
             }
         }
 
