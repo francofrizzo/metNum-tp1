@@ -256,8 +256,7 @@ int main(int argc, char* argv[]) {
             cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
             ofstream timefile;
             timefile.open("tiempos.out", ios::app);
-            timefile << m << " " << n << " " << ninst << " " << t << endl;
-        }
+            timefile << m << " " << n << " " << ninst << " " << algoritmo << " " << t << endl;
 
     } else if (algoritmo == '0') {       
 
@@ -303,7 +302,7 @@ int main(int argc, char* argv[]) {
             cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
             ofstream timefile;
             timefile.open("tiempos.out", ios::app);
-            timefile << m << " " << n << " " << ninst << " " << t << endl;
+            timefile << m << " " << n << " " << ninst << " " << algoritmo << " " << t << endl;
         }
     }
 
