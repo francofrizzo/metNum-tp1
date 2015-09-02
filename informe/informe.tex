@@ -84,15 +84,27 @@
 % Contenido
 \section{Introducción teórica}
 
-  Contendrá una breve explicación de la base teórica que fundamenta los métodos involucrados en el trabajo, junto con los métodos mismos. No deben incluirse demostraciones de propiedades ni teoremas, ejemplos innecesarios, ni definiciones elementales (como por ejemplo la de matriz simétrica). En vez de definiciones básicas es conveniente citar ejemplos de bibliograía adecuada. \emph{Una cita vale más que mil palabras}.
+  Contendrá una breve explicación de la base teórica que fundamenta los métodos involucrados en el trabajo, junto con los métodos mismos. No deben incluirse demostraciones de propiedades ni teoremas, ejemplos innecesarios, ni definiciones elementales (como por ejemplo la de matriz simétrica). En vez de definiciones básicas es conveniente citar ejemplos de bibliografía adecuada. \emph{Una cita vale más que mil palabras}.
 
   \begin{figure}[h]
     \centering
-    \includegraphics[width=3cm]{altoHorno.jpg}
-    \caption{Podemos insertar imágenes.}
+    \includegraphics[width=4cm]{altoHorno.jpg}
+    \caption{Alto horno.}
   \end{figure}
 
-  Un alto horno es un cilindro con paredes de un cierto ancho. Dentro del mismo, se realiza la fusión de metales a temperaturas muy elevadas. Resulta útil calcular la isoterma de algún valor critico dentro de la pared, para prevenir que su estructura externa colapse.
+  En el presente trabajo, nos proponemos utilizar un modelo matemático para resolver un problema físico. Consideraremos la sección horizontal de un alto horno, que es un horno cilíndrico en cuyo interior se realiza la fusión de metales a temperaturas muy elevadas. Se conocen la temperatura en la pared interior del horno, que es constante y de 1500{\degree}C, 
+
+  utilizando un modelo matemático que consiste en el planteo y la resolución de un sistema de ecuaciones lineales. Por lo tanto, serán de interés para nosotros los métodos que permitan encontrar soluciones de este tipo de sistemas de manera computacional.
+
+  Dado un sistema de $n$ ecuaciones con $n$ incógnitas, podemos expresarlo en forma matricial, de la forma $Ax=b$, donde $A \in \mathbb{R}^{nxn}$ contiene los coeficientes de las ecuaciones, $b \in \mathbb{R}^n$ los términos independientes, y $x \in \mathbb{R}$ es el vector solución 
+
+    \subsection{Eliminación Gaussiana}
+      Es de 
+
+    \subsection{Factorización LU}
+
+
+  Un alto horno es un cilindro con paredes de un cierto ancho. Dentro del mismo, . Resulta útil calcular la isoterma de algún valor critico dentro de la pared, para prevenir que su estructura externa colapse.
 
   El objetivo del siguiente trabajo es, dadas las temperaturas internas y externas de las paredes de un alto horno y un valor, estimar la isoterma de ese valor.
 
@@ -205,7 +217,7 @@
           Por último, probemos que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula.
           \begin{itemize}
             \item Si $1 \leq u + 1 \leq n$ o $mn < u + 1 \leq (m+1)n$, tendremos que la fila $u + 1$ tendrá un $1$ en la diagonal y $0$ en las demás posiciones, por lo que no se verá afectada por el algoritmo de Eliminación Gaussiana. Luego $A^{(u)}_{u+1,u+1} = 1$.
-            \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es banda $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar. \qedhere
+            \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es \emph{banda} $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar. \qedhere
           \end{itemize}
         \end{itemize}
       \end{proof}
@@ -230,6 +242,8 @@
     Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
 
   \subsection{Mediciones experimentales realizadas}
+
+
 
 
 \section{Resultados}
@@ -395,6 +409,9 @@
 
   \newpage
   \section{Otras cosillas}
+
+    \subsection{Demostración de que la matriz del sistema es \emph{banda}}
+      Notemos que la
 
     Resultados que valga la pena mencionar en el trabajo pero que sean demasiado específicos para aparecer en el cuerpo principal del trabajo podrán mencionarse en sucesivos apéndices rotulados con las letras mayusculas del alfabeto romano. Por ejemplo: la demostración de una propiedad que aplican para optimizar el algoritmo que programaron para resolver un problema.
 
