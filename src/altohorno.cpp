@@ -257,6 +257,7 @@ int main(int argc, char* argv[]) {
             ofstream timefile;
             timefile.open("tiempos.out", ios::app);
             timefile << m << " " << n << " " << ninst << " " << algoritmo << " " << t << endl;
+        }
 
     } else if (algoritmo == '0') {       
 
