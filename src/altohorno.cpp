@@ -26,6 +26,21 @@ int modulo(int a) {
     return res;
 }
 
+double peligrosidad(vector iso, double re) {
+    int n = iso.tamano();
+    double res = 0;
+    for(int i = 0; i < n; i++) {
+        if (iso[i] > res) {
+            res = iso[i];
+        }
+    }
+    return res / re;
+
+}
+
+
+
+
 vector isotermaMenorDiferencia(vector v, double iso, int n, int m, double re, double ri) {
     vector res = vector(n);
     double h;
@@ -212,13 +227,17 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
-
+                double indiceDePeligro = peligrosidad(isoterma, re);
+                cout << "indice de peligrosidad:" << indiceDePeligro << endl;
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {
                     isofile << fixed << setprecision(6) << isoterma[j] << endl;
                 }
+
+                //isofile << fixed << setprecision(6) << indiceDePeligro << endl;
             }
         }
+
 
     // } else if ('1' == '0') {       
     } else if (algoritmo == '0') {       
@@ -248,6 +267,8 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
+                double indiceDePeligro = peligrosidad(isoterma, re);
+                cout << "indice de peligrosidad:" << indiceDePeligro << endl;
 
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {
