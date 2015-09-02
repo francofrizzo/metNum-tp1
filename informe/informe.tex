@@ -106,6 +106,44 @@
 
   Así formamos una matriz diagonal dominante, lo que nos permite asegurarnos que el método de eliminación gaussiana se va a poder llevar a cabo sin necesidad de intercambiar filas, es decir, sin pivoteo.
 
+  Notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
+
+  \begin{itemize}
+
+    \item Para las filas $1$ a $n$ de la matriz, correspondientes al borde interno de la discretización, y $mn + 1 $ a $(m+1)n$, correspondientes al borde externo, tenemos que
+      \[ A_{p,q} = \begin{cases}
+        1 & \text{si $p = q$} \\
+        0 & \text{si $p \neq q$}
+      \end{cases} \]
+    Por lo tanto,
+      \[ \vert A_{p,p} \vert = 1 \geq 0 = \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \]
+
+    \item Las filas $n + 1$ a $mn$ de la matriz corresponden a los puntos $t_{j,k}$ de la discretización con $1 \leq j < m$. En todos estos casos, encontramos solo 5 coeficientes no nulos en la $p$-ésima fila, siendo el que aparece en la diagonal el correspondiente a la variable $t_{j,k}$, y por lo tanto
+      \[ \begin{split}
+        \vert A_{p,p} \vert &= \left \vert - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} \right \vert \\
+        &= \left \vert - \frac{1}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+        &= \left \vert - \frac{r - \Delta r}{r (\Delta r)^2} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+        &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \right \vert
+      \end{split} \]
+
+    Teniendo en cuenta que
+      \[ r - \Delta r = (r_i + j \Delta r) - \Delta r = r_i + (j - 1) \Delta r > 0\]
+    dado que $r_i, \Delta r > 0$ y $j \geq 1$, es fácil notar que todos los términos que aparecen dentro del módulo son positivos, y por lo tanto
+      \[ \vert A_{p,p} \vert = \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \]
+
+    Por otro lado
+      \[ \begin{split}
+        \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert &= \left \vert \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right \vert + 2 \left \vert \frac{1}{r^2 (\Delta \theta)^2} \right \vert + \left \vert \frac{1}{(\Delta r)^2} \right \vert \\
+        &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} \right \vert + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \\
+        &= \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} = \vert A_{p,p} \vert
+      \end{split} \]
+
+  \end{itemize}
+
+  De lo anterior, se sigue que
+    \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $1 \leq p \leq (m+1)n$} \]
+  es decir, $A$ es diagonal dominante de forma no estricta.
+
 \section{Resultados}
 
   Deben incluir los resultados de los experimentos, utilizando el formato más adecuado para su presentación. Deberán especificar claramente a qué experiencia corresponde cada resultado. No se incluirán aquí corridas de máquina.
@@ -163,7 +201,7 @@
       \end{equation}
 
       \begin{equation} \label{eq:en3}
-        (r_e, \theta) = T_e(\theta) \text{ para todo punto } (r_e, \theta)
+        T(r_e, \theta) = T_e(\theta) \text{ para todo punto } (r_e, \theta)
       \end{equation}
 
       El problema en derivadas parciales dado por la primera ecuación con las condiciones de contorno presentadas recientemente, permite encontrar la función $T$ de temperatura en el interior del horno (sector A), en función de los datos mencionados en esta sección.
