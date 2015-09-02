@@ -115,103 +115,122 @@
 
   % Así formamos una matriz diagonal dominante, lo que nos permite asegurarnos que el método de eliminación gaussiana se va a poder llevar a cabo sin necesidad de intercambiar filas, es decir, sin pivoteo.
 
-  Para poder utilizar los métodos elegidos para resolver el problema, necesitamos asegurarnos de que estos son aplicables en este caso en particular. Bastará con asegurarnos de poder aplicar Eliminación Gaussiana sin pivoteo, ya que esto implica que también podremos calcular la factorización LU de la matriz del sistema.\cite[p.~403]{burden}
+  \subsection{Planteo del sistema y métodos numéricos aplicados}
 
-  En primer lugar, notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
+    \subsubsection*{Demostración de que puede aplicarse Eliminación Gaussiana en el sistema estudiado}
 
-  \begin{itemize}
+      Para poder utilizar los métodos elegidos para resolver el problema, necesitamos asegurarnos de que estos son aplicables en este caso en particular. Bastará con asegurarnos de poder aplicar Eliminación Gaussiana sin pivoteo, ya que esto implica que también podremos calcular la factorización LU de la matriz del sistema.\cite[p.~403]{burden}
 
-    \item Para las filas $1$ a $n$ de la matriz, correspondientes al borde interno de la discretización, y $mn + 1 $ a $(m+1)n$, correspondientes al borde externo, tenemos que
-      \[ A_{p,q} = \begin{cases}
-        1 & \text{si $p = q$} \\
-        0 & \text{si $p \neq q$}
-      \end{cases} \]
-    Por lo tanto,
-      \[ \vert A_{p,p} \vert = 1 \geq 0 = \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \]
+      En primer lugar, notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
 
-    \item Las filas $n + 1$ a $mn$ de la matriz corresponden a los puntos $t_{j,k}$ de la discretización con $1 \leq j < m$. En todos estos casos, encontramos solo 5 coeficientes no nulos en la $p$-ésima fila, siendo el que aparece en la diagonal el correspondiente a la variable $t_{j,k}$, y por lo tanto
-      \[ \begin{split}
-        \vert A_{p,p} \vert &= \left \vert - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} \right \vert \\
-        &= \left \vert - \frac{1}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
-        &= \left \vert - \frac{r - \Delta r}{r (\Delta r)^2} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
-        &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \right \vert
-      \end{split} \]
-
-    Teniendo en cuenta que
-      \[ r - \Delta r = (r_i + j \Delta r) - \Delta r = r_i + (j - 1) \Delta r > 0\]
-    dado que $r_i, \Delta r > 0$ y $j \geq 1$, es fácil notar que todos los términos que aparecen dentro del módulo son positivos, y por lo tanto
-      \[ \vert A_{p,p} \vert = \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \]
-
-    Por otro lado
-      \[ \begin{split}
-        \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert &= \left \vert \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right \vert + 2 \left \vert \frac{1}{r^2 (\Delta \theta)^2} \right \vert + \left \vert \frac{1}{(\Delta r)^2} \right \vert \\
-        &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} \right \vert + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \\
-        &= \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} = \vert A_{p,p} \vert
-      \end{split} \]
-
-  \end{itemize}
-
-  De lo anterior, se sigue que
-    \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $p = 1, \dots, (m+1)n$} \]
-  es decir, $A$ es diagonal dominante de forma no estricta.
-
-  \begin{obs}
-    \label{obs:Diagonal de A sin ceros}
-    Para todo $p = 1, \dots, (m+1)n$, $\vert A_{p,p} \vert > 0$, i.e. la diagonal de $A$ no contiene ceros.
-  \end{obs}
-
-  A continuación, probaremos un resultado que nos será útil: al realizar el primer paso de Eliminación Gaussiana sobre una matriz diagonal dominante, la matriz resultante también lo es.
-
-  \begin{lema}
-    \label{lema:EG conserva diagonal dominante}
-    Sea $A^{(0)} = A \in \mathbb{R}^{n \times n}$ una matriz diagonal dominante, y $A^{(1)}$ el resultado de aplicar un paso de Eliminación Gaussiana (sin pivoteo) sobre $A$. Entonces $A^{(1)}$ es diagonal dominante.
-  \end{lema}
-  \begin{proof}
-    Consideremos la fila $i$-ésima de $A^{(1)}$, y veamos que $\left \vert A^{(1)}_{i,i} \right \vert \geq \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert$. Tenemos que
-    \[ \left \vert A^{(1)}_{i,i} \right \vert = \left \vert A_{i,i} - \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert
-      \qquad \text{y} \qquad
-    \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
-      = \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \]
-
-    Luego,
-
-    \[ \begin{split}
-      \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
-      &= \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \\
-      &\leq \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{i,j} \vert + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{1,j} \vert \\
-      &\leq \left( \vert A_{i,i} \vert - \vert A_{i,1} \vert \right) + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \left( \vert A_{1,1} \vert - \vert A_{1,i} \vert \right) \\
-      &= \vert A_{i,i} \vert - \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \vert A_{1,i} \vert \\
-      &\leq \left \vert A_{i,i} -  \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert = \left \vert A^{(1)}_{i,i} \right \vert
-    \end{split} \]
-  \end{proof}
-
-  Consideremos de nuevo la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ correspondiente al sistema estudiado. Probemos ahora que es posible aplicar Eliminación Gaussiana sin pivoteo. Más especificamente, probaremos que para $u \leq (m+1)n$, es posible realizar $u$ iteraciones de Eliminación Gaussiana sobre $A$ sin pivoteo, y que luego de las mismas, la matriz $A^{(u)}$ resultante es diagonal dominante, con su fila $u + 1$ no nula.
-
-  \begin{proof}
-    Lo haremos por inducción en $u$. 
-    \begin{itemize}
-      \item[\textbf{C.B.}] Teniendo en cuenta que la primera fila de la matriz $A$ tiene necesariamente un $1$ en la diagonal y $0$ en las demás posiciones, se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo, dado que $A_{1, 1}$ es no nulo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
-          
-      \item[\textbf{P.I.}] Supongamos que la matriz $A^{(u - 1)}$, obtenida tras aplicar $u - 1$ pasos de Eliminación Gaussiana sobre $A$, es diagonal dominante, con su $u$-ésima fila no nula. Esto implica que $A^{(u - 1)}_{u,u} \neq 0$. Notemos que podemos escribir a $A^{(u - 1)}$ por bloques de la siguiente manera
-        \[ A^{(u - 1)} = \left( \begin{matrix} U_{u - 1} & B \\ 0 & \widetilde{A}_{u - 1} \end{matrix} \right) \]
-      donde las matrices $U_{u - 1} \in \mathbb{R}^{(u-1)\times(u-1)}$ y $\widetilde{A}_{u - 1} \in \mathbb{R}^{(n-u+1)\times(n-u+1)}$ son trivialmente diagonal dominantes.
-
-      Podemos ver que realizar el paso $u$-ésimo del algoritmo de Eliminación Gaussiana sobre $A$ equivale a realizar el primer paso de este algoritmo sobre $\widetilde{A}_{u - 1}$, sin modificar el resto de la matriz. Dado que $A^{(u - 1)}_{u,u} \neq 0$, podremos realizar esto sin pivoteo, y del Lema 1 se sigue que el resultado de este proceso será diagonal dominante, lo cual implica directamente que también lo será $A^{(u)}$.
-
-      Por último, probemos que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula.
       \begin{itemize}
-        \item Si $1 \leq u + 1 \leq n$ o $mn < u + 1 \leq (m+1)n$, tendremos que la fila $u + 1$ tendrá un $1$ en la diagonal y $0$ en las demás posiciones, por lo que no se verá afectada por el algoritmo de Eliminación Gaussiana. Luego $A^{(u)}_{u+1,u+1} = 1$.
-        \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es banda $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar.
+
+        \item Para las filas $1$ a $n$ de la matriz, correspondientes al borde interno de la discretización, y $mn + 1 $ a $(m+1)n$, correspondientes al borde externo, tenemos que
+          \[ A_{p,q} = \begin{cases}
+            1 & \text{si $p = q$} \\
+            0 & \text{si $p \neq q$}
+          \end{cases} \]
+        Por lo tanto,
+          \[ \vert A_{p,p} \vert = 1 \geq 0 = \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \]
+
+        \item Las filas $n + 1$ a $mn$ de la matriz corresponden a los puntos $t_{j,k}$ de la discretización con $1 \leq j < m$. En todos estos casos, encontramos solo 5 coeficientes no nulos en la $p$-ésima fila, siendo el que aparece en la diagonal el correspondiente a la variable $t_{j,k}$, y por lo tanto
+          \[ \begin{split}
+            \vert A_{p,p} \vert &= \left \vert - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} \right \vert \\
+            &= \left \vert - \frac{1}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert - \frac{r - \Delta r}{r (\Delta r)^2} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \right \vert
+          \end{split} \]
+
+        Teniendo en cuenta que
+          \[ r - \Delta r = (r_i + j \Delta r) - \Delta r = r_i + (j - 1) \Delta r > 0\]
+        dado que $r_i, \Delta r > 0$ y $j \geq 1$, es fácil notar que todos los términos que aparecen dentro del módulo son positivos, y por lo tanto
+          \[ \vert A_{p,p} \vert = \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \]
+
+        Por otro lado
+          \[ \begin{split}
+            \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert &= \left \vert \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right \vert + 2 \left \vert \frac{1}{r^2 (\Delta \theta)^2} \right \vert + \left \vert \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} \right \vert + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \\
+            &= \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} = \vert A_{p,p} \vert
+          \end{split} \]
+
       \end{itemize}
+
+      De lo anterior, se sigue que
+        \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $p = 1, \dots, (m+1)n$} \]
+      es decir, $A$ es diagonal dominante de forma no estricta.
+
+      \begin{obs}
+        \label{obs:Diagonal de A sin ceros}
+        Para todo $p = 1, \dots, (m+1)n$, $\vert A_{p,p} \vert > 0$, i.e. la diagonal de $A$ no contiene ceros.
+      \end{obs}
+
+      A continuación, probaremos un resultado que nos será útil: al realizar el primer paso de Eliminación Gaussiana sobre una matriz diagonal dominante, la matriz resultante también lo es.
+
+      \begin{lema}
+        \label{lema:EG conserva diagonal dominante}
+        Sea $A^{(0)} = A \in \mathbb{R}^{n \times n}$ una matriz diagonal dominante, y $A^{(1)}$ el resultado de aplicar un paso de Eliminación Gaussiana (sin pivoteo) sobre $A$. Entonces $A^{(1)}$ es diagonal dominante.
+      \end{lema}
+      \begin{proof}
+        Consideremos la fila $i$-ésima de $A^{(1)}$, y veamos que $\left \vert A^{(1)}_{i,i} \right \vert \geq \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert$. Tenemos que
+        \[ \left \vert A^{(1)}_{i,i} \right \vert = \left \vert A_{i,i} - \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert
+          \qquad \text{y} \qquad
+        \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+          = \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \]
+
+        Luego,
+
+        \[ \begin{split}
+          \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+          &= \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \\
+          &\leq \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{i,j} \vert + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{1,j} \vert \\
+          &\leq \left( \vert A_{i,i} \vert - \vert A_{i,1} \vert \right) + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \left( \vert A_{1,1} \vert - \vert A_{1,i} \vert \right) \\
+          &= \vert A_{i,i} \vert - \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \vert A_{1,i} \vert \\
+          &\leq \left \vert A_{i,i} -  \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert = \left \vert A^{(1)}_{i,i} \right \vert
+        \end{split} \]
+      \end{proof}
+
+      Consideremos de nuevo la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ correspondiente al sistema estudiado. Probemos ahora que es posible aplicar Eliminación Gaussiana sin pivoteo. Más especificamente, probaremos que para $u \leq (m+1)n$, es posible realizar $u$ iteraciones de Eliminación Gaussiana sobre $A$ sin pivoteo, y que luego de las mismas, la matriz $A^{(u)}$ resultante es diagonal dominante, con su fila $u + 1$ no nula.
+
+      \begin{proof}
+        Lo haremos por inducción en $u$. 
+        \begin{itemize}
+          \item[\textbf{C.B.}] Teniendo en cuenta que la primera fila de la matriz $A$ tiene necesariamente un $1$ en la diagonal y $0$ en las demás posiciones, se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo, dado que $A_{1, 1}$ es no nulo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
+              
+          \item[\textbf{P.I.}] Supongamos que la matriz $A^{(u - 1)}$, obtenida tras aplicar $u - 1$ pasos de Eliminación Gaussiana sobre $A$, es diagonal dominante, con su $u$-ésima fila no nula. Esto implica que $A^{(u - 1)}_{u,u} \neq 0$. Notemos que podemos escribir a $A^{(u - 1)}$ por bloques de la siguiente manera
+            \[ A^{(u - 1)} = \left( \begin{matrix} U_{u - 1} & B \\ 0 & \widetilde{A}_{u - 1} \end{matrix} \right) \]
+          donde las matrices $U_{u - 1} \in \mathbb{R}^{(u-1)\times(u-1)}$ y $\widetilde{A}_{u - 1} \in \mathbb{R}^{(n-u+1)\times(n-u+1)}$ son trivialmente diagonal dominantes.
+
+          Podemos ver que realizar el paso $u$-ésimo del algoritmo de Eliminación Gaussiana sobre $A$ equivale a realizar el primer paso de este algoritmo sobre $\widetilde{A}_{u - 1}$, sin modificar el resto de la matriz. Dado que $A^{(u - 1)}_{u,u} \neq 0$, podremos realizar esto sin pivoteo, y del Lema 1 se sigue que el resultado de este proceso será diagonal dominante, lo cual implica directamente que también lo será $A^{(u)}$.
+
+          Por último, probemos que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula.
+          \begin{itemize}
+            \item Si $1 \leq u + 1 \leq n$ o $mn < u + 1 \leq (m+1)n$, tendremos que la fila $u + 1$ tendrá un $1$ en la diagonal y $0$ en las demás posiciones, por lo que no se verá afectada por el algoritmo de Eliminación Gaussiana. Luego $A^{(u)}_{u+1,u+1} = 1$.
+            \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es banda $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar. \qedhere
+          \end{itemize}
+        \end{itemize}
+      \end{proof}
+
+  \subsection{Implementación de los métodos}
+
+  \subsection{Estimación de la posición de la isoterma y medida de la peligrosidad}
+
+    Una vez obtenida la resolución del sistema, fue necesario decidir un criterio para estimar la ubicación de la isoterma pedida. Algunas de las alternativas que consideramos al respecto fueron las siguientes:
+
+    \begin{itemize}
+      \item Para cada ángulo $\theta_k$, considerar como posición de la isoterma el radio correspondiente al punto $(r_j, \theta_k)$ de la discretización con el valor de $t_{j,k}$ más próximo a 500{\degree}C.
+      \item Para cada ángulo $\theta_k$, considerar como posición de la isoterma el radio del punto de la discretización inmediatamente exterior al primero con temperatura mayor o igual a 500{\degree}C, contando desde la pared externa. Es decir, considerar el menor radio $r_j$ tal que $t_{j',k} < 500$ para todo $j' \geq j$. La ventaja de este método es que asegura que la isoterma nunca se encontrará más cerca de la pared externa que el resultado arrojado, garantizando que se detectarán todas las posibles situaciones de riesgo.
+      \item Para cada ángulo $\theta_k$, considerar $r_j$, el radio del punto más externo de la discretización con temperatura mayor o igual a 500{\degree}C. Luego, sabiendo que la isoterma buscada se encontrará entre este radio y el inmediatamente exterior, aproximar la variación de la temperatura en los puntos intermedios mediante una función lineal y utilizar esta aproximación para estimar la posición de la isoterma. Más precisamente, si $r_{iso}$ es el radio de la isoterma buscada, entonces
+        \[ r_{iso} = r_j + \Delta r \left(\frac{500 - t_{j,k}}{t_{j+1,k} - t_{j,k}} \right) \]
     \end{itemize}
-  \end{proof}
 
-Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante. 
+    Finalmente, decidimos aplicar este último criterio, porque consideramos que brinda información más precisa que los otros dos, al tener en cuenta el valor la diferencia de temperatura entre los puntos de la discretización más cercanos a la isoterma buscada y la isoterma en si misma, información que los dos primeros métodos descartan. De esta manera, nos permite detectar situaciones de riesgo que con el primer método pasarían desapercibidas, pero evitando la generación de falsos positivos que provocaría el segundo método, que es mucho más estricto.
 
-Para calcular la isoterma, al ser  una función discretizada puede no tomar en ninguno de los valores observables el valor exacto de la isoterma a calcular. Para decidir por donde pasara la isoterma lo que vamos a hacer es tomar los dos valores entre los que sabemos  que se encuentra y suponer que entre estos dos radios la temperatura se mueve linealmente. Para ello dividimos la distancia de los radios a tener en cuenta por la diferencia entre las temperaturas que estamos mirando. A esto le multiplicamos la diferencia de la isoterma con el valor mas cercano al borde interno. Ahora calculamos la distancia desde el centro hasta el radio mas cercano al externo y le restamos la diferencia entre 1 y el valor previamente calculado. 
-Otras opciones que planteamos fueron tomar de los dos valores el mas próximo al valor de la isoterma y el segundo quedarnos con el mas próximo a la pared externa. Para ello calculamos la diferencia en modulo entre cada uno de los dos puntos en cuestión  con el valor de la isoterma y nos quedamos con el que de un resultado menor.
-El segundo caso marcaba un mayor valor en el radio mas cercano a la pared externa que el que realmente tenía (ya que la isoterma tiene un valor mayor a este por ser mas próxima al radio interno). Esto hacia que en caso de correr el riesgo de que el alto horno colapse, seguro que iba a ser visible.
-La aproximación del caso elegido nos pareció la mas correcta ya que suponer que la temperatura es lineal entre dos radios es un punto medio entre las opciones descartadas. En los otros casos podemos tomar un valor y que en realidad la isoterma pase por el otro. Con el método elegido siempre quedamos en un punto medio de cuando nos acercamos o nos alejamos mucho del valor real por los otros casos.
+  \subsection{Hipótesis planteadas}
+
+    Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
+
+  \subsection{Mediciones experimentales realizadas}
+
 
 \section{Resultados}
 
