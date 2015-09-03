@@ -8,7 +8,7 @@
   		En el gráfico presentado, se puede notar que no hay diferencia entre los índices de las instancias con 5 y 10 particiones sobre ángulos, ya que al calcularlos utilizando el método explicado anteriormente, el punto más cercano a la pared en la primera, fue considerado en la segunda. 
 
   		En cambio, en el resto de las instancias, el índice de peligrosidad aumenta, ya que al tomar más particiones, fueron tomados en cuenta nuevos puntos, afectando la isoterma, y por lo tanto, el índice. 
-  		
+
   		De esta forma, demostramos experimentalmente nuestra hipótesis. 
 
   	\subsubsection*{Experimento 4: Índice de peligrosidad según ancho de la pared}
@@ -16,6 +16,11 @@
   	\subsubsection*{Experimento 5: Tiempo según número de instancias}
 
   	\subsubsection*{Experimento 6: Tiempo según granularidad}
+  		En los dos gráficos correspondientes a este experimento, es claro el crecimiento del tiempo de ejecución, a medida que la granularidad aumenta, tanto en los ángulos como en los radios. Esto se debe a la complejidad de los algoritmos utilizados.
+
+  		También, es importante notar como el tiempo de ejecución sobre una sola instancia no cambia demasiado al modificar el método de resolución. Sabemos que, cuando se trata de un solo caso, factorización LU tiene complejidad mayor por constantes que eliminación gaussiana, lo que se puede visualizar en los casos con mayor granularidad de la discretización.
+
+
 
     \subsubsection*{Experimento 7: Isoterma según temperatura en pared externa}
 
