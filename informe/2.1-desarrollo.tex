@@ -1,0 +1,227 @@
+\section{Desarrollo}
+
+  {\color{Gray} Deben explicarse los métodos numéricos que utilizaron y su aplicación al problema concreto involucrado en el trabajo práctico. Se deben mencionar los pasos que siguieron para implementar los algoritmos, las dificultades que fueron encontrando y la descripción de cómo las fueron resolviendo. Explicar también cómo fueron planteadas y realizadas las mediciones experimentales. Los ensayos fallidos, hipótesis y conjeturas equivocadas, experimentos y métodos malogrados deben figurar en esta sección, con una breve explicación de los motivos de estas fallas (en caso de ser conocidas).}
+
+  \subsection{Modelo y planteo del sistema}
+
+    Llamamos $r_e \in \mathbb{R}_{>0}$ al radio exterior y $r_i \in \mathbb{R}_{>0}$ al radio interior de la pared del horno. Para cada punto, consideramos sus coordenadas polares $(r, \theta)$ con origen en el centro del horno, y llamaremos $T(r, \theta)$ a la temperatura en dicho punto. En el estado estacionario, esta temperatura satisface la ecuación del calor:
+
+    \begin{equation} \label{des:eq1}
+      \frac{\partial^2 T(r, \theta)}{\partial r^2} + \frac{1}{r} \frac{\partial T(r, \theta)}{\partial r} + \frac{1}{r^2} \frac{\partial^2 T(r, \theta)}{\partial \theta^2} = 0
+    \end{equation}
+
+    Para poder tratar computacionalmente el problema, necesitamos una versión discreta del mismo. Con este fin, consideramos una partición del sector interno de la pared del horno en $m + 1$ radios equidistantes, $r_i = r_0 < r_1 < \dots < r_m = r_e$, con $r_j - r_{j-1} = \Delta r$ para $j = 1, \dots m+1$, y en $n$ ángulos, $0 = \theta_0 < \theta_1 < ... < \theta_n = 2\pi$, con $\theta_k - \theta_{k-1} = \Delta \theta$ para $k = 1, \dots n$.
+
+    Nuestro objetivo es calcular el valor de $t_{j,k} = T(r_j, \theta_k)$ para $j = 0, \dots m$ y $k = 0, \dots n-1$, utilizando la ecuación (\ref{des:eq1}) y los datos disponibles sobre las condiciones de borde: conocemos el valor de la temperatura en los puntos de la pared externa, $t_{m,k} = T_e(\theta_k)$, para todo $k = 0, \dots n-1$, como así también el valor de la temperatura en el interior del horno, $t_{0,k} = T_i$, que es constante con respecto a $k$.
+
+    Para discretizar el problema continuo planteado por la ecuación (\ref{des:eq1}), utilizamos las siguientes fórmulas de diferencias finitas:
+    \[ \frac{\partial^2 T(r, \theta)}{\partial r^2}(r_j, \theta_k) \cong \frac{t_{j-1,k} - 2 t_{jk} + t_{j+1,k}}{(\Delta r)^2} \]
+    \[ \frac{\partial T(r, \theta)}{\partial r}(r_j, \theta_k) \cong \frac{t_{j,k} - t_{j-1,k}}{\Delta r} \]
+    \[ \frac{\partial^2 T(r, \theta)}{\partial \theta^2}(r_j, \theta_k) \cong \frac{t_{j,k-1} - 2 t_{jk} + t_{j,k+1}}{(\Delta \theta)^2} \]
+    que nos permiten obtener un conjunto de ecuaciones lineales en las incógnitas $t_{j,k}$.
+
+    De esta manera, podemos reunir la información de la que disponemos sobre el problema discreto en un sistema de $(m+1)n$ ecuaciones con $(m+1)n$ incógnitas, cada una de ellas el valor de $t_{j,k}$ para algún $j = 0, \dots m$, $k = 0, \dots n-1$. En otras palabras, el problema de calcular la temperatura en todos los puntos de la discretización se reduce a la resolución del siguiente sistema de ecuaciones lineales:
+
+    \[ \begin{cases}
+    \setlength{\jot}{2em}
+      t_{0,k} = T_i
+        & \text{para } 0 \leq k < n \\[1em]
+      \begin{gathered}
+        \left( \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right) t_{j-1,k} +
+          \left( \frac{1}{r^2(\Delta \theta)^2} \right) t_{j,k-1} + \\
+          \left( - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2(\Delta \theta)^2} \right) t_{j,k} + \\
+          \left( \frac{1}{r^2(\Delta \theta)^2} \right) t_{j,k+1} +
+          \left( \frac{1}{(\Delta r)^2} \right) t_{j+1,k} = 0 \\[1em]
+        \end{gathered}
+        & \text{para } 1 \leq j < m,\ 0 \leq k < n \\
+      t_{m,k} = T_e(\theta_k)
+        & \text{para } 0 \leq k < n \\
+    \end{cases} \]
+
+    Al construir la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ asociada a este sistema, ordenamos las ecuaciones y las variables de la siguiente forma:
+    \begin{itemize}
+      \item La ecuación referida a la variable $t_{j,k}$, es decir, la ecuación donde aparece como única incógnita cuando $j = 0$ o $j = m$, o bien la ecuación donde aparece junto a sus cuatro puntos vecinos en la discretización si $1 \leq j < m$, es representada por la fila $p$-ésima de la matriz, con $p = jn+k$.
+      \item A la variable $t_{j,k}$ le corresponde la columna $q$-ésima, con $q = jn+k$.
+    \end{itemize}
+
+    La matriz construida de esta forma cumple con la importante propiedad de ser \emph{banda} $n, n$. Esto significa que todos los coeficientes que se encuentran fuera de una banda de ancho $n$ hacia ambos lados de la diagonal son nulos, i.e. $A_{p,q} = 0$ siempre que $\vert p - q \vert > n$. Esto puede verse fácilmente:
+
+    \begin{itemize}
+      \item Las filas $1, \dots, n$ y $mn + 1, \dots, (m+1)n$ de la matriz, que corresponden a las ecuaciones relativas a los puntos de la pared interna y externa del horno, respectivamente, contienen un $1$ en la diagonal y $0$ en todas las demás posiciones, por lo que la propiedad se verifica trivialmente.
+      \item Para $p = n + 1, \dots, mn$, la fila $p$-ésima de la matriz representa a la ecuación relativa a $t_{j,k}$, con $p = jn+k$. Es sencillo comprobar que los coeficientes correspondientes a $t_{j-1,k}$, $t_{j,k-1}$, $t_{j,k}$, $t_{j,k+1}$ y $t_{j+1,k}$ se encontrarán en las columnas $p-n$, $p-1$, $p$, $p+1$ y $p+n$, respectivamente. Estos elementos están confinados a una banda de ancho $n$ hacia ambos lados de la diagonal, y como las variables a las que corresponden son las únicas que aparecen en la ecuación, todos los demás coeficientes de la fila serán necesariamente nulos.
+    \end{itemize}
+
+  \subsection{Métodos utilizados}
+
+    Para resolver el sistema de ecuaciones expuesto, utilizaremos los ya introducidos métodos de Eliminación Gaussiana y Factorización LU. Estos métodos no son aplicables en cualquier caso, sino que requieren que el sistema
+
+    \SetKwFunction{sustAtras}{Sustitución hacia atrás}
+    \SetKwFunction{sustAdelante}{Sustitución hacia adelante}
+
+    \begin{algorithm}[H]
+      \caption{Sustitución hacia atrás}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$, considerando a $A$ como una matriz triangular superior}
+      \For{$i \gets n$ \KwTo $1$}{
+        $suma \gets 0$ \;
+        \For{$j \gets i + 1$ \KwTo $n$}{
+          $suma \gets suma + s_j \cdot A_{i,j}$ \;
+        }
+        $s_i \gets \frac{b_i - suma}{A_{i,i}}$
+      }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Sustitución hacia adelante}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$, considerando a $A$ como una matriz triangular inferior}
+      \For{$i \gets 1$ \KwTo $n$}{
+        $suma \gets 0$ \;
+        \For{$j \gets 1$ \KwTo $i$}{
+          $suma \gets suma + s_j \cdot A_{i,j}$ \;
+        }
+        $s_i \gets \frac{b_i - suma}{A_{i,i}}$
+      }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Eliminación Gaussiana}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$}
+      \For{$j \gets 1$ \KwTo $n$}{
+        \For{$i \gets 1$ \KwTo $n$}{
+          $m \gets \frac{A_{i,j}}{A_{j,j}}$ \;
+          \For{$k \gets j$ \KwTo $n$}{
+            $A_{i,k} \gets A_{i,k} - m \cdot A_{j,k}$ \;
+          }
+          $b_i \gets b_i - m \cdot b_j$ \;
+        }
+      }
+      $s \gets$ \sustAtras{$A,b$} \;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Factorización LU}
+      \KwData{$A \in \mathbb{R}^{n \times n}$}
+      \KwResult{$B \in \mathbb{R}^{n \times n}$, tal que los elementos ubicados por encima de y en la diagonal forman una matriz triangular superior $U$, y los ubicados por debajo de la misma, completados con unos en la diagonal, forman una matriz triangular inferior $L$, con $LU=A$}
+      \For{$j \gets 1$ \KwTo $n$}{
+        \For{$i \gets 1$ \KwTo $n$}{
+          $m \gets \frac{A_{i,j}}{A_{j,j}}$ \;
+          $B_{i}{j} \gets m$ \;
+          \For{$k \gets j+1$ \KwTo $n$}{
+            $B_{i,k} \gets A_{i,k} - m \cdot A_{j,k}$ \;
+          }
+        }
+      }
+    \end{algorithm}
+
+    \subsubsection*{Demostración de que puede aplicarse Eliminación Gaussiana en el sistema estudiado}
+
+      
+
+      En primer lugar, notemos que la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ es diagonal dominante, de manera no estricta. En efecto:
+
+      \begin{itemize}
+
+        \item Para las filas $1$ a $n$ de la matriz, correspondientes al borde interno de la discretización, y $mn + 1 $ a $(m+1)n$, correspondientes al borde externo, tenemos que
+          \[ A_{p,q} = \begin{cases}
+            1 & \text{si $p = q$} \\
+            0 & \text{si $p \neq q$}
+          \end{cases} \]
+        Por lo tanto,
+          \[ \vert A_{p,p} \vert = 1 \geq 0 = \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \]
+
+        \item Las filas $n + 1$ a $mn$ de la matriz corresponden a los puntos $t_{j,k}$ de la discretización con $1 \leq j < m$. En todos estos casos, encontramos solo 5 coeficientes no nulos en la $p$-ésima fila, siendo el que aparece en la diagonal el correspondiente a la variable $t_{j,k}$, y por lo tanto
+          \[ \begin{split}
+            \vert A_{p,p} \vert &= \left \vert - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} \right \vert \\
+            &= \left \vert - \frac{1}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert - \frac{r - \Delta r}{r (\Delta r)^2} - \frac{2}{r^2 (\Delta \theta)^2} - \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \right \vert
+          \end{split} \]
+
+        Teniendo en cuenta que
+          \[ r - \Delta r = (r_i + j \Delta r) - \Delta r = r_i + (j - 1) \Delta r > 0\]
+        dado que $r_i, \Delta r > 0$ y $j \geq 1$, es fácil notar que todos los términos que aparecen dentro del módulo son positivos, y por lo tanto
+          \[ \vert A_{p,p} \vert = \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \]
+
+        Por otro lado
+          \[ \begin{split}
+            \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert &= \left \vert \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right \vert + 2 \left \vert \frac{1}{r^2 (\Delta \theta)^2} \right \vert + \left \vert \frac{1}{(\Delta r)^2} \right \vert \\
+            &= \left \vert \frac{r - \Delta r}{r (\Delta r)^2} \right \vert + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} \\
+            &= \frac{r - \Delta r}{r (\Delta r)^2} + \frac{2}{r^2 (\Delta \theta)^2} + \frac{1}{(\Delta r)^2} = \vert A_{p,p} \vert
+          \end{split} \]
+
+      \end{itemize}
+
+      De lo anterior, se sigue que
+        \[ \vert A_{p,p} \vert \geq \sum_{\substack{q=1 \\ q \neq p}}^{(m+1)n} \vert A_{p,q} \vert \qquad \text{para todo $p = 1, \dots, (m+1)n$} \]
+      es decir, $A$ es diagonal dominante de forma no estricta.
+
+      \begin{obs}
+        \label{obs:Diagonal de A sin ceros}
+        Para todo $p = 1, \dots, (m+1)n$, $\vert A_{p,p} \vert > 0$, i.e. la diagonal de $A$ no contiene ceros.
+      \end{obs}
+
+      A continuación, probaremos un resultado que nos será útil: al realizar el primer paso de Eliminación Gaussiana sobre una matriz diagonal dominante, la matriz resultante también lo es.
+
+      \begin{lema}
+        \label{lema:EG conserva diagonal dominante}
+        Sea $A^{(0)} = A \in \mathbb{R}^{n \times n}$ una matriz diagonal dominante, y $A^{(1)}$ el resultado de aplicar un paso de Eliminación Gaussiana (sin pivoteo) sobre $A$. Entonces $A^{(1)}$ es diagonal dominante.
+      \end{lema}
+      \begin{proof}
+        Consideremos la fila $i$-ésima de $A^{(1)}$, y veamos que $\left \vert A^{(1)}_{i,i} \right \vert \geq \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert$. Tenemos que
+        \[ \left \vert A^{(1)}_{i,i} \right \vert = \left \vert A_{i,i} - \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert
+          \qquad \text{y} \qquad
+        \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+          = \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \]
+
+        Luego,
+
+        \[ \begin{split}
+          \sum_{\substack{j = 1 \\ j \neq i}}^n \left \vert A^{(1)}_{i,j} \right \vert
+          &= \sum_{\substack{j = 2 \\ j \neq i}}^n \left \vert A_{i,j} - \frac{A_{i,1}}{A_{1,1}} A_{1,j} \right \vert \\
+          &\leq \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{i,j} \vert + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \sum_{\substack{j = 2 \\ j \neq i}}^n \vert A_{1,j} \vert \\
+          &\leq \left( \vert A_{i,i} \vert - \vert A_{i,1} \vert \right) + \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \left( \vert A_{1,1} \vert - \vert A_{1,i} \vert \right) \\
+          &= \vert A_{i,i} \vert - \left \vert \frac{A_{i,1}}{A_{1,1}} \right \vert \vert A_{1,i} \vert \\
+          &\leq \left \vert A_{i,i} -  \frac{A_{i,1}}{A_{1,1}} A_{1,i} \right \vert = \left \vert A^{(1)}_{i,i} \right \vert
+        \end{split} \]
+      \end{proof}
+
+      Consideremos de nuevo la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ correspondiente al sistema estudiado. Probemos ahora que es posible aplicar Eliminación Gaussiana sin pivoteo. Más especificamente, probaremos que para $u \leq (m+1)n$, es posible realizar $u$ iteraciones de Eliminación Gaussiana sobre $A$ sin pivoteo, y que luego de las mismas, la matriz $A^{(u)}$ resultante es diagonal dominante, con su fila $u + 1$ no nula.
+
+      \begin{proof}
+        Lo haremos por inducción en $u$. 
+        \begin{itemize}
+          \item[\textbf{C.B.}] Teniendo en cuenta que la primera fila de la matriz $A$ tiene necesariamente un $1$ en la diagonal y $0$ en las demás posiciones, se deduce trivialmente que es posible aplicar el primer paso de Eliminación Gaussiana sin realizar pivoteo, dado que $A_{1, 1}$ es no nulo. Del Lema \ref{lema:EG conserva diagonal dominante}, se sigue que la matriz $A^{(1)}$ obtenida será diagonal dominante. Como $A_{1, 2} = 0$, tendremos $A^{(1)}_{2,2} = A_{2,2}$, que es necesariamente no nulo (Observación \ref{obs:Diagonal de A sin ceros}), por lo que la segunda fila de $A^{(1)}$ será no nula.
+              
+          \item[\textbf{P.I.}] Supongamos que la matriz $A^{(u - 1)}$, obtenida tras aplicar $u - 1$ pasos de Eliminación Gaussiana sobre $A$, es diagonal dominante, con su $u$-ésima fila no nula. Esto implica que $A^{(u - 1)}_{u,u} \neq 0$. Notemos que podemos escribir a $A^{(u - 1)}$ por bloques de la siguiente manera
+            \[ A^{(u - 1)} = \left( \begin{matrix} U_{u - 1} & B \\ 0 & \widetilde{A}_{u - 1} \end{matrix} \right) \]
+          donde las matrices $U_{u - 1} \in \mathbb{R}^{(u-1)\times(u-1)}$ y $\widetilde{A}_{u - 1} \in \mathbb{R}^{(n-u+1)\times(n-u+1)}$ son trivialmente diagonal dominantes.
+
+          Podemos ver que realizar el paso $u$-ésimo del algoritmo de Eliminación Gaussiana sobre $A$ equivale a realizar el primer paso de este algoritmo sobre $\widetilde{A}_{u - 1}$, sin modificar el resto de la matriz. Dado que $A^{(u - 1)}_{u,u} \neq 0$, podremos realizar esto sin pivoteo, y del Lema 1 se sigue que el resultado de este proceso será diagonal dominante, lo cual implica directamente que también lo será $A^{(u)}$.
+
+          Por último, probemos que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula.
+          \begin{itemize}
+            \item Si $1 \leq u + 1 \leq n$ o $mn < u + 1 \leq (m+1)n$, tendremos que la fila $u + 1$ tendrá un $1$ en la diagonal y $0$ en las demás posiciones, por lo que no se verá afectada por el algoritmo de Eliminación Gaussiana. Luego $A^{(u)}_{u+1,u+1} = 1$.
+            \item En caso contrario, por la forma en la que se construye la matriz del sistema, $A_{u+1,u+1+n}$ corresponde al coeficiente de la variable $t_{j,k+1}$ de la $u + 1$-ésima ecuación del sistema, que es trivialmente no nulo. Además, la matriz $A$ es \emph{banda} $n, n$, como se demuestra en el Anexo C. Por lo tanto, $A_{p,u+1+n} = 0$ para todo $p = 0, \dots, u$ y, por consiguiente, $A^{(u)}_{u+1,u+1+n} = A_{u+1,u+1+n}$. Esto implica que la fila $u + 1$ de la matriz $A^{(u)}$ es no nula, como queríamos probar. \qedhere
+          \end{itemize}
+        \end{itemize}
+      \end{proof}
+
+  \subsection{Implementación de los métodos}
+
+  \subsection{Estimación de la posición de la isoterma y medida de la peligrosidad}
+
+    Una vez obtenida la resolución del sistema, fue necesario decidir un criterio para estimar la ubicación de la isoterma pedida. Algunas de las alternativas que consideramos al respecto fueron las siguientes:
+
+    \begin{itemize}
+      \item Para cada ángulo $\theta_k$, considerar como posición de la isoterma el radio correspondiente al punto $(r_j, \theta_k)$ de la discretización con el valor de $t_{j,k}$ más próximo a 500{\degree}C.
+      \item Para cada ángulo $\theta_k$, considerar como posición de la isoterma el radio del punto de la discretización inmediatamente exterior al primero con temperatura mayor o igual a 500{\degree}C, contando desde la pared externa. Es decir, considerar el menor radio $r_j$ tal que $t_{j',k} < 500$ para todo $j' \geq j$. La ventaja de este método es que asegura que la isoterma nunca se encontrará más cerca de la pared externa que el resultado arrojado, garantizando que se detectarán todas las posibles situaciones de riesgo.
+      \item Para cada ángulo $\theta_k$, considerar $r_j$, el radio del punto más externo de la discretización con temperatura mayor o igual a 500{\degree}C. Luego, sabiendo que la isoterma buscada se encontrará entre este radio y el inmediatamente exterior, aproximar la variación de la temperatura en los puntos intermedios mediante una función lineal y utilizar esta aproximación para estimar la posición de la isoterma. Más precisamente, si $r_{iso}$ es el radio de la isoterma buscada, entonces
+        \[ r_{iso} = r_j + \Delta r \left(\frac{500 - t_{j,k}}{t_{j+1,k} - t_{j,k}} \right) \]
+    \end{itemize}
+
+    Finalmente, decidimos aplicar este último criterio, porque consideramos que brinda información más precisa que los otros dos, al tener en cuenta el valor la diferencia de temperatura entre los puntos de la discretización más cercanos a la isoterma buscada y la isoterma en si misma, información que los dos primeros métodos descartan. De esta manera, nos permite detectar situaciones de riesgo que con el primer método pasarían desapercibidas, pero evitando la generación de falsos positivos que provocaría el segundo método, que es mucho más estricto.
+
+    Para elegir la medida de peligrosidad lo que hacemos es tomar de todos los valores por los que pasa la isoterma el mas próximo a la pared externa del alto horno. A ese valor lo dividimos por el radio externo, dando así la relación entre la distancia mas cercana a la pared externa de la isoterma y la distancia total.
+    Este es un numero entre 1 y 0 donde 0 es el centro del horno y 1 es la pared externa. Cuanto mas cercano a 1 sea el valor, mas peligro de colapsar tiene. 

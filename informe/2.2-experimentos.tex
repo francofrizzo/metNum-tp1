@@ -1,0 +1,5 @@
+  \subsection{Hipótesis planteadas}
+
+    Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
+
+  \subsection{Mediciones experimentales realizadas}
