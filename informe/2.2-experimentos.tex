@@ -1,5 +1,22 @@
   \subsection{Hipótesis planteadas}
 
-    Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
+  	\subsubsection*{Experimento 1}
+
+  	\subsubsection*{Experimento 2}
+
+  	\subsubsection*{Experimento 3}
+  		El objetivo de este experimento es observar el cambio del índice de peligrosidad en una instancia particular del horno al ir modificando su discretización, pero manteniendo su temperatura. 
+  		Se pretende generar una instancia con un sector de la pared externa donde la temperatura es notablemente mayor para poder notar facilmente el cambio en la posición de la isoterma y su respectivo valor de peligrosidad. Luego, se crean instancias similares con menor granularidad de ángulos y sin modificar las temperaturas. El resultado esperado es que el índice de peligrosidad disminuya o se mantenga a medida que la granularidad de la discretización es menor. Esto sucede ya que al considerar menos puntos, es posible que el valor considerado al calcular el índice en una instancia ya no sea tomado en cuenta al calcularlo en otra instancia con menos particiones.
+
+  	\subsubsection*{Experimento 4}
+  		En este experimento se generan distintas instancias para un mismo sistema, con el objetivo de comparar el tiempo de ejecución al resolverlas mediante el método de eliminación gaussiana y la factorización LU. 
+  		
+  		
+    	Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
+
+  	\subsubsection*{Experimento 5}
+  		Otro de los experimentos que hicimos fue comprar la variación de la medida de peligrosidad cuando modificamos el grosor de la pared del alto horno, sin modificar las temperaturas de la pared externa.
+		Suponemos que a medida que el grosor de la pared disminuye, la medida de peligrosidad aumentará. Esto es así ya que al dejar las temperaturas constantes, la isoterma no se modifica pero se encuentra cada vez mas cerca de la pared externa.
+
 
   \subsection{Mediciones experimentales realizadas}
