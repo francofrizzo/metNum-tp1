@@ -1,34 +1,28 @@
   \subsection{Hipótesis planteadas}
 
-  	\subsubsection*{Experimento 1}
-  	Tomando la real ver como se aleja la isoterma cuando disminuyo la cant de radios y despues lo mismo con angulos
-  	Para realiar este experimento, concideraremos una matriz con 
-
-
-
-
-
-
   	\subsubsection*{Experimento 2}
+  	Para realizar este experimento, calcularemos la isoterma en un sistema donde la temperatura de la pared externa no es constante y la granularidad es muy alta. Suponemos que esta será la isoterma real (la mas cercana a la realidad). 
+  	En este experimento observaremos como varia la isoterma cuando cambiamos la granularidad de los radios, dejando los engulos constantes, o la de los ángulos, dejando los radios constantes. 
+  	Suponemos que en ambos casos lo que se observara es que cuanto menor granularidad haya, mas alejada estará la isoterma de la real, ya que la diferencia entre radios va a aumentar y vamos a suponer en tramos mas grande que la temperatura decrece de forma lineal.
 
   	\subsubsection*{Experimento 3}
-  		El objetivo de este experimento es observar el cambio del índice de peligrosidad en una instancia particular del horno al ir modificando su discretización, pero manteniendo su temperatura. 
-  		Se pretende generar una instancia con un sector de la pared externa donde la temperatura es notablemente mayor para poder notar facilmente el cambio en la posición de la isoterma y su respectivo valor de peligrosidad. Luego, se crean instancias similares con menor granularidad de ángulos y sin modificar las temperaturas. El resultado esperado es que el índice de peligrosidad disminuya o se mantenga a medida que la granularidad de la discretización es menor. Esto sucede ya que al considerar menos puntos, es posible que el valor considerado al calcular el índice en una instancia ya no sea tomado en cuenta al calcularlo en otra instancia con menos particiones.
+  	El objetivo de este experimento es observar el cambio del índice de peligrosidad en una instancia particular del horno al ir modificando su discretización, pero manteniendo su temperatura. 
+  	Se pretende generar una instancia con un sector de la pared externa donde la temperatura es notablemente mayor para poder notar facilmente el cambio en la posición de la isoterma y su respectivo valor de peligrosidad. Luego, se crean instancias similares con menor granularidad de ángulos y sin modificar las temperaturas. El resultado esperado es que el índice de peligrosidad disminuya o se mantenga a medida que la granularidad de la discretización es menor. Esto sucede ya que al considerar menos puntos, es posible que el valor considerado al calcular el índice en una instancia ya no sea tomado en cuenta al calcularlo en otra instancia con menos particiones.
 
   	\subsubsection*{Experimento 4}
-  		En este experimento se generan distintas instancias para un mismo sistema, con el objetivo de comparar el tiempo de ejecución al resolverlas mediante el método de eliminación gaussiana y la factorización LU. 
-  		Para ello, creamos sistemas con diferentes cantidades de instancias y comparamos los tiermpos de ejecucion de los mismos para cada uno de los metodos.
-  		Para que los tiempos de ejecucion sean lo mas real posible, realizamos un mismo experimento 7 veces y calculamos el promedio de los resultados obtenidos.
-  		Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
+  	En este experimento se generan distintas instancias para un mismo sistema, con el objetivo de comparar el tiempo de ejecución al resolverlas mediante el método de eliminación gaussiana y la factorización LU. 
+  	Para ello, creamos sistemas con diferentes cantidades de instancias y comparamos los tiermpos de ejecucion de los mismos para cada uno de los metodos.
+  	Para que los tiempos de ejecucion sean lo mas real posible, realizamos un mismo experimento 7 veces y calculamos el promedio de los resultados obtenidos.
+  	Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
 
   	\subsubsection*{Experimento 5}
-  		En este experimento compramos la variación de la medida de peligrosidad cuando modificamos el grosor de la pared del alto horno, sin modificar las temperaturas de la pared externa.
-		Suponemos que a medida que el grosor de la pared disminuye, la medida de peligrosidad aumentará. Esto es así ya que al dejar las temperaturas constantes, la isoterma no se modifica pero se encuentra cada vez mas cerca de la pared externa.
+  	En este experimento compramos la variación de la medida de peligrosidad cuando modificamos el grosor de la pared del alto horno, sin modificar las temperaturas de la pared externa.
+	Suponemos que a medida que el grosor de la pared disminuye, la medida de peligrosidad aumentará. Esto es así ya que al dejar las temperaturas constantes, la isoterma no se modifica pero se encuentra cada vez mas cerca de la pared externa.
 
   	\subsubsection*{Experimento 6}
-  		El objetivo de este experimento observar como varian los tiempos cuando usamos el metodo de eliminacion gaussiana o factorizacion LU cuando variamos la granularidad de radios o la de angulos.
-  		Hacemos el mismo experimento dos veces, uno para cada uno de los metodos nuemricos. Lo que hacemos es manteniendo las temperaturas constantes, variamos la granularidad de los angulos dejando la de los radios intacta. Calculamos la isoterma para cada una de las distintas granularidades y comparamos los tiempos que toman las distintas ejecuciones. Repetimos esto mismo, ahora variando la granularidad de los radios. Luego tomamos el otro metodo numerico y volvemos a iniciar el experimento. 
-  		La complejidad del algoritmo es cubico en el tamño de la entrada. Como solo variamos la granularidad del radio o del angulo entonces en ambos casos suponemos que el tiempo de ejecucion va a ser cubico con relacion a la granularidad de la entrada.
+  	El objetivo de este experimento observar como varian los tiempos cuando usamos el metodo de eliminacion gaussiana o factorizacion LU cuando variamos la granularidad de radios o la de angulos.
+  	Hacemos el mismo experimento dos veces, uno para cada uno de los metodos nuemricos. Lo que hacemos es manteniendo las temperaturas constantes, variamos la granularidad de los angulos dejando la de los radios intacta. Calculamos la isoterma para cada una de las distintas granularidades y comparamos los tiempos que toman las distintas ejecuciones. Repetimos esto mismo, ahora variando la granularidad de los radios. Luego tomamos el otro metodo numerico y volvemos a iniciar el experimento. 
+  	La complejidad del algoritmo es cubico en el tamño de la entrada. Como solo variamos la granularidad del radio o del angulo entonces en ambos casos suponemos que el tiempo de ejecucion va a ser cubico con relacion a la granularidad de la entrada.
 
 
   \subsection{Mediciones experimentales realizadas}
