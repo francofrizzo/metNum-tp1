@@ -5,6 +5,7 @@
 #include <time.h>
 
 #define M_PI 3.14159265358979323846
+#define FILE_TIEMPOS "tiempos.sol"
 
 // using std::ifstream;
 // using std::ofstream;
@@ -255,7 +256,7 @@ int main(int argc, char* argv[]) {
         if (pidieronTiempo) {
             cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
             ofstream timefile;
-            timefile.open("tiempos.sol", ios::app);
+            timefile.open(FILE_TIEMPOS, ios::app);
             timefile << m << " " << n << " " << ninst << " " << algoritmo << " " << t << endl;
         }
 
@@ -271,7 +272,6 @@ int main(int argc, char* argv[]) {
             // mat.esDiagDomin(); // CHEQUEO
 
             vector res = matCopia.eliminacionGaussiana(datos[i]);
-
 
             // Imprimo los resultados
             for (int j = 0; j < res.tamano(); j++) {
@@ -302,7 +302,7 @@ int main(int argc, char* argv[]) {
         if (pidieronTiempo) {
             cout << "Tiempo de ejecución (ciclos de clock): " << t << endl;
             ofstream timefile;
-            timefile.open("tiempos.sol", ios::app);
+            timefile.open(FILE_TIEMPOS, ios::app);
             timefile << m << " " << n << " " << ninst << " " << algoritmo << " " << t << endl;
         }
     }
