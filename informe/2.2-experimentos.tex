@@ -12,7 +12,7 @@
 
   	Se pretende generar una instancia con un sector de la pared externa donde la temperatura es notablemente mayor para poder notar facilmente el cambio en la posición de la isoterma y su respectivo valor de peligrosidad. Luego, se crean instancias similares con menor granularidad de ángulos y sin modificar las temperaturas. 
 
-    El resultado esperado es que el índice de peligrosidad disminuya o se mantenga a medida que la granularidad de la discretización es menor. Esto sucede ya que al considerar menos puntos, es posible que el valor considerado al calcular el índice en una instancia ya no sea tomado en cuenta al calcularlo en otra instancia con menos particiones.
+    El resultado esperado es que el índice de peligrosidad disminuya o se mantenga a medida que la granularidad de la discretización es menor. Esto sucede ya que al tomar menos puntos, es posible que el valor considerado al calcular el índice en una instancia ya no sea tomado en cuenta al calcularlo en otra instancia con menos particiones.
 
     \subsubsection*{Experimento 4: Índice de peligrosidad según ancho de la pared}
     Se busca estudiar la variación de la medida de peligrosidad con respecto al grosor de la pared del alto horno, sin modificar las temperaturas de la pared externa.
@@ -35,13 +35,14 @@
   	El objetivo de este experimento es observar como varían los tiempos de ejecución al resolver sistemas con mismas temperaturas pero diferente granularidad, y modificando el método utilizado.
   	
     Hacemos el mismo experimento dos veces, uno para cada uno de los metodos nuemricos. Manteniendo las temperaturas constantes, variamos cantidad de particiones de los angulos dejando la de los radios intacta. Calculamos la solucion del sistema para cada una de las distintas granularidades y comparamos los tiempos que toman las diferentes ejecuciones. Repetimos esto mismo, ahora variando las particiones de los radios. Luego tomamos el otro metodo numerico y volvemos a iniciar el experimento. 
+
   	La complejidad del algoritmo es cubico en el tamño de la entrada. Como solo variamos la granularidad del radio o del angulo (de jando el otro constante) entonces en ambos casos suponemos que el tiempo de ejecucion va a ser cubico con relacion a la granularidad de la entrada.
 
 
-  \subsubsection*{Experimento 7: relacion de la isoterma con los bordes}
+    \subsubsection*{Experimento 7: Isoterma según temperatura en pared externa}
     En este experimento vamos a observar como varia la isoterma cuando modificamos la temperatura de la pared externa del horno.
     Suponemos que cuando mayor sea la temperatura, la isoterma estará mas cerca de la pared esxterna del alto horno. 
-    para ello tomamos dos sistemas con temperaturas externas constantes pero distintos entre si .Graficamos para cada uno de ellos la isoterma 500 y veremos, si la hipotesis es correcta, que en el caso en el que la temperatura externa es mayos, la isoterma esta mas cerca de la pared externa que en el otro caso. 
-    Vere
+
+    Para ello tomamos dos sistemas con temperaturas externas constantes pero distintos entre si. Graficamos para cada uno de ellos la isoterma 500 y veremos, si la hipotesis es correcta, que en el caso en el que la temperatura externa es mayor, la isoterma esta mas cerca de la pared externa que en el otro caso. 
 
   \subsection{Mediciones experimentales realizadas}
