@@ -1,12 +1,15 @@
 \section{Discusión}
 
-\subsubsection*{Experimento 1: Isoterma según granularidad}
 
+\subsubsection*{Experimento 1: Isoterma según granularidad}
 \subsubsection*{Experimento 2: Isoterma según granularidad}
 
 \subsubsection*{Experimento 3: Índice de peligrosidad según granularidad}
+  	En el gráfico presentado, se puede notar que no hay diferencia entre los índices de las instancias con 5 y 10 particiones sobre ángulos, ya que al calcularlos utilizando el método explicado anteriormente, el punto más cercano a la pared en la primera, fue considerado en la segunda. 
 
+  	En cambio, en el resto de las instancias, el índice de peligrosidad aumenta, ya que al tomar más particiones, fueron tomados en cuenta nuevos puntos, afectando la isoterma, y por lo tanto, el índice. 
 
+  	De esta forma, demostramos experimentalmente nuestra hipótesis. 
 
 
 \subsubsection*{Experimento 4}
@@ -17,6 +20,10 @@
 	Se observa que cuando hay pocas instancias, buscar la isoterma con el metodo de eliminacion gaussiana o el de factriazacion LU es muy similar. A medida que aumentan las instancias las diferencias entre ambos metodos aumentan, ya que la factorizacion LU se mantiene casi inmutable al aumentar las instancias mientras que la eliminacion gaussiana aumenta notoriamente. Se puede observar que lo que tarda la eliminacion gaussiana cuando tiene 2 instancias es aproximadamentre el doble de lo que tarda cuando es una unica instancia. Cuando son 3 instancias, tarda el triple de lo que tarda cuando es una unica instancia. Entonces saean n instancias entonces lo que tarda la elimimacion gaussiana es lo que tarda cuando es una unica instancia * n. Esto es asi ya que en este metodo numerico, para cada una de las instancias recalcula toda la matriz. En cambio la factorizacion LU, calcula la matriz una unica vez.
 
 
+\subsubsection*{Experimento 6: Tiempo según granularidad}
+  	En los dos gráficos correspondientes a este experimento, es claro el crecimiento del tiempo de ejecución, a medida que la granularidad aumenta, tanto en los ángulos como en los radios. Esto se debe a la complejidad de los algoritmos utilizados.
+
+  	También, es importante notar como el tiempo de ejecución sobre una sola instancia no cambia demasiado al modificar el método de resolución. Sabemos que, cuando se trata de un solo caso, factorización LU tiene complejidad mayor por constantes que eliminación gaussiana, lo que se puede visualizar en los casos con mayor granularidad de la discretización.
 
 
 \subsubsection*{Experimento 7: relacion de la isoterma con los bordes}
