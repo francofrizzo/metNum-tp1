@@ -7,3 +7,11 @@ horno('4-40.in', '4-40.sol', '4-40-iso2.sol', 'graficos/4-40', 'graficos/4-40-is
 horno('4-60.in', '4-60.sol', '4-60-iso2.sol', 'graficos/4-60', 'graficos/4-60-iso');
 horno('4-80.in', '4-80.sol', '4-80-iso2.sol', 'graficos/4-80', 'graficos/4-80-iso');
 horno('4-90.in', '4-90.sol', '4-90-iso2.sol', 'graficos/4-90', 'graficos/4-90-iso');
+
+x = [5, 10, 20, 40, 60, 80, 90]; % Cant. ángulos
+y = [0.44124, 0.557452, 0.683942, 0.822686, 0.90908, 0.973116, 1]
+plot(x, y);
+hold on;
+plot(x, y, '.');
+hold off;
+print('4','-dpng');
