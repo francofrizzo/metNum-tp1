@@ -84,7 +84,7 @@
 % Contenido
 \section{Introducción teórica}
 
-  Contendrá una breve explicación de la base teórica que fundamenta los métodos involucrados en el trabajo, junto con los métodos mismos. No deben incluirse demostraciones de propiedades ni teoremas, ejemplos innecesarios, ni definiciones elementales (como por ejemplo la de matriz simétrica). En vez de definiciones básicas es conveniente citar ejemplos de bibliografía adecuada. \emph{Una cita vale más que mil palabras}.
+  En el presente trabajo, nos proponemos utilizar un modelo matemático para resolver un problema físico. Consideraremos la sección horizontal de un alto horno, que es un horno cilíndrico en cuyo interior se realiza la fusión de metales a temperaturas muy elevadas. Se conocen la temperatura en la pared interior del horno, que es constante y de 1500{\degree}C, y se cuenta con sensores que proporcionan información sobre la temperatura en el exterior del horno, que oscila entre 50 y 200{\degree}C. Con el objeto de evaluar la peligrosidad de la estructura, resulta útil calcular la posición de la isoterma de 500{\degree}C en el interior de la pared, y contar con un criterio que permita decidir, en función al resultado obtenido, si existe algún riesgo de colapso de la estructura.
 
   \begin{figure}[h]
     \centering
@@ -92,32 +92,20 @@
     \caption{Alto horno.}
   \end{figure}
 
-  En el presente trabajo, nos proponemos utilizar un modelo matemático para resolver un problema físico. Consideraremos la sección horizontal de un alto horno, que es un horno cilíndrico en cuyo interior se realiza la fusión de metales a temperaturas muy elevadas. Se conocen la temperatura en la pared interior del horno, que es constante y de 1500{\degree}C, 
+  Contamos con un modelo matemático, que explicaremos con más detalle en la próxima sección, que nos permite discretizar el dominio del problema y resolverlo por medio de un sistema de ecuaciones lineales. Por lo tanto, serán de interés para nosotros los métodos que permitan encontrar soluciones de este tipo de sistemas de manera computacional.
 
-  utilizando un modelo matemático que consiste en el planteo y la resolución de un sistema de ecuaciones lineales. Por lo tanto, serán de interés para nosotros los métodos que permitan encontrar soluciones de este tipo de sistemas de manera computacional.
+  Utilizaremos dos métodos diferentes para encarar el problema planteado: el método de Eliminación Gaussiana y el de Factorización LU. Ambos se valen del hecho de que un sistema de ecuaciones puede expresarse en forma matricial, y de que realizando ciertas operaciones sobre las filas de la matriz del sistema, puede obtenerse un sistema equivalente, que tiene las mismas soluciones. Más aún, puede probarse que todo sistema es equivalente a otro cuya matriz es triangular, y encontrar la solución de este tipo de sistemas es sumamente sencillo, utilizando los algoritmos de sustitución hacia adelante o sustitución hacia atrás.
 
-  Dado un sistema de $n$ ecuaciones con $n$ incógnitas, podemos expresarlo en forma matricial, de la forma $Ax=b$, donde $A \in \mathbb{R}^{nxn}$ contiene los coeficientes de las ecuaciones, $b \in \mathbb{R}^n$ los términos independientes, y $x \in \mathbb{R}$ es el vector solución 
+  El método de Eliminación Gaussiana itera sobre las columnas de la matriz, colocando ceros en todas las posiciones que se encuentran por debajo de la diagonal. Para hacer esto, en la $i$-ésima iteración, resta a todas las filas a partir de la $i + 1$ un múltiplo de la fila $i$-ésima, con un factor elegido convenientemente. Esto asegura que, al completar el algoritmo, la matriz obtenida será triangular superior.
+
+  En su forma más básica, el método falla si aparece un cero en 
 
     \subsection{Eliminación Gaussiana}
-      Es de 
+      La eliminación gaussiana consiste en convertir la matriz del sistema en una matriz triangular superior y de esta forma simplificar el cálculo de las incógnitas utilizando sustitución hacia atrás.
 
     \subsection{Factorización LU}
+      La factorización LU es un método similar al anterior pero no modifica el vector resultado y guarda los cambios que se le realizan a la matriz generada por el sistema al triangularla. Esto hace que para un mismo sistema de ecuaciones lineales con distintos resultados no sea necesario recalcular para cada uno la matriz triangulada, si  no que se realiza solo una vez y luego se afecta al vector resultado con los cambios guardados.
 
-
-  Un alto horno es un cilindro con paredes de un cierto ancho. Dentro del mismo, . Resulta útil calcular la isoterma de algún valor critico dentro de la pared, para prevenir que su estructura externa colapse.
-
-  El objetivo del siguiente trabajo es, dadas las temperaturas internas y externas de las paredes de un alto horno y un valor, estimar la isoterma de ese valor.
-
-  Al calcular la isoterma, se va a considerar un corte transversal de dicho horno. Para trabajar este problema computacionalmente, se discretizará el dominio en coordenadas polares.
-
-  Se utilizará la ecuación de Laplace que permite relacionar cada punto del dominio con sus 4 vecinos. Esto genera un sistema de ecuaciones lineales que será resuelto utilizando los métodos numéricos de eliminación gaussiana y factorización LU.
-
-  La eliminación gaussiana consiste en convertir la matriz del sistema en una matriz triangular superior y de esta forma simplificar el cálculo de las incógnitas utilizando sustitución hacia atrás.
-
-  La factorización LU es un método similar al anterior pero no modifica el vector resultado y guarda los cambios que se le realizan a la matriz generada por el sistema al triangularla. Esto hace que para un mismo sistema de ecuaciones lineales con distintos resultados no sea necesario recalcular para cada uno la matriz triangulada, si  no que se realiza solo una vez y luego se afecta al vector resultado con los cambios guardados.
-
-  % Ecuación de Laplace
-  % Buscar citas en libros sobre eliminación gaussiana y factorización LU
 
 \section{Desarrollo}
 
