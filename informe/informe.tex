@@ -19,10 +19,13 @@
     language=C++,
     basicstyle=\small\ttfamily
   }
-\usepackage[spanish, onelanguage]{algorithm2e}
+\usepackage[onelanguage, spanish]{algorithm2e}
   % \NoCaptionOfAlgo
   \LinesNumbered\RestyleAlgo{ruled}\IncMargin{1em}\DontPrintSemicolon\SetArgSty{}\SetCommentSty{textsf}\SetFuncSty{textsf}
+  \SetKwProg{For}{para}{ hacer}{fin}
+  \SetKwProg{Fn}{función}{:}{fin}
 \usepackage[pdftex]{graphicx} % Imágenes
+\usepackage[usenames,dvipsnames]{color} % Autoexplicativo
 \usepackage{caratula} % Carátula del DC
 
 % Bibliografía
@@ -45,8 +48,8 @@
 \rhead{Trabajo Práctico Nº 1 - \emph{``Con 15 $\theta$s discretizo alto horno''}}
 % Pie de pagina
 \renewcommand{\footrulewidth}{0.4pt}
-\lfoot{Grupo XX}
-\rfoot{FCEN - UBA}
+% \lfoot{FCEN}
+% \rfoot{UBA}
 
 \begin{document}
 
@@ -54,7 +57,6 @@
 \materia{Métodos Numéricos}
 \titulo{Trabajo Práctico Nº 1}
 \subtitulo{``Con 15 $\theta$s discretizo alto horno''}
-\grupo{Grupo: XX}
 \fecha{Segundo cuatrimestre de 2015}
 
 \integrante{Frizzo, Franco}{013/14}{francofrizzo@gmail.com}
@@ -69,10 +71,10 @@
 \begin{addmargin}[4em]{4em}
 
 \section*{\centering Resumen}
-  El resumen, de no más de 200 palabras, deberá explicar brevemente el trabajo realizado y las conclusiones de los autores de manera que pueda ser útil por sí solo para dar una idea del contenido del trabajo.
+  {\color{Gray} El resumen, de no más de 200 palabras, deberá explicar brevemente el trabajo realizado y las conclusiones de los autores de manera que pueda ser útil por sí solo para dar una idea del contenido del trabajo.}
 
 \vspace{4em}
-\noindent \strong{Palabras clave:} Las palabras clave, no más de cuatro, deben ser términos técnicos que den una idea del contenido del trabajo para facilitar su búsqueda en una base de datos temática.
+\noindent \strong{Palabras clave:} {\color{Gray} Las palabras clave, no más de cuatro, deben ser términos técnicos que den una idea del contenido del trabajo para facilitar su búsqueda en una base de datos temática.}
 
 \end{addmargin}
 \newpage
@@ -83,6 +85,8 @@
 
 % Contenido
 \section{Introducción teórica}
+
+  {\color{Gray} Contendrá una breve explicación de la base teórica que fundamenta los métodos involucrados en el trabajo, junto con los métodos mismos. No deben incluirse demostraciones de propiedades ni teoremas, ejemplos innecesarios, ni definiciones elementales (como por ejemplo la de matriz simétrica). En vez de definiciones básicas es conveniente citar ejemplos de bibliografía adecuada. \emph{Una cita vale más que mil palabras.}}
 
   En el presente trabajo, nos proponemos utilizar un modelo matemático para resolver un problema físico. Consideraremos la sección horizontal de un alto horno, que es un horno cilíndrico en cuyo interior se realiza la fusión de metales a temperaturas muy elevadas. Se conocen la temperatura en la pared interior del horno, que es constante y de 1500{\degree}C, y se cuenta con sensores que proporcionan información sobre la temperatura en el exterior del horno, que oscila entre 50 y 200{\degree}C. Con el objeto de evaluar la peligrosidad de la estructura, resulta útil calcular la posición de la isoterma de 500{\degree}C en el interior de la pared, y contar con un criterio que permita decidir, en función al resultado obtenido, si existe algún riesgo de colapso de la estructura.
 
@@ -96,26 +100,126 @@
 
   Utilizaremos dos métodos diferentes para encarar el problema planteado: el método de Eliminación Gaussiana y el de Factorización LU. Ambos se valen del hecho de que un sistema de ecuaciones puede expresarse en forma matricial, y de que realizando ciertas operaciones sobre las filas de la matriz del sistema, puede obtenerse un sistema equivalente, que tiene las mismas soluciones. Más aún, puede probarse que todo sistema es equivalente a otro cuya matriz es triangular, y encontrar la solución de este tipo de sistemas es sumamente sencillo, utilizando los algoritmos de sustitución hacia adelante o sustitución hacia atrás.
 
-  El método de Eliminación Gaussiana itera sobre las columnas de la matriz, colocando ceros en todas las posiciones que se encuentran por debajo de la diagonal. Para hacer esto, en la $i$-ésima iteración, resta a todas las filas a partir de la $i + 1$ un múltiplo de la fila $i$-ésima, con un factor elegido convenientemente. Esto asegura que, al completar el algoritmo, la matriz obtenida será triangular superior.
+  El método de \emph{Eliminación Gaussiana} itera sobre las columnas de la matriz, colocando ceros en todas las posiciones que se encuentran por debajo de la diagonal. Para hacer esto, en la $i$-ésima iteración, se resta a todas las filas a partir de la $i + 1$ un múltiplo de la fila $i$-ésima, con un factor elegido convenientemente. Esto asegura que, al completar el algoritmo, la matriz obtenida será triangular superior.
 
-  En su forma más básica, el método falla si aparece un cero en 
+  En su forma más básica, el método falla si en alguna iteración se anula el elemento de la diagonal correspondiente a la columna sobre la que se está trabajando. Para salvar esta dificultad, se utiliza una técnica conocida como \emph{pivoteo}, que consiste en alterar el orden de las filas o de las columnas de la matriz. Sin embargo, como probaremos más adelante, la matriz asociada al sistema que estudiaremos tiene la particularidad de que el algoritmo de Eliminación Gaussiana puede aplicarse sin realizar pivoteo.
 
-    \subsection{Eliminación Gaussiana}
-      La eliminación gaussiana consiste en convertir la matriz del sistema en una matriz triangular superior y de esta forma simplificar el cálculo de las incógnitas utilizando sustitución hacia atrás.
-
-    \subsection{Factorización LU}
-      La factorización LU es un método similar al anterior pero no modifica el vector resultado y guarda los cambios que se le realizan a la matriz generada por el sistema al triangularla. Esto hace que para un mismo sistema de ecuaciones lineales con distintos resultados no sea necesario recalcular para cada uno la matriz triangulada, si  no que se realiza solo una vez y luego se afecta al vector resultado con los cambios guardados.
-
+  El método de \emph{Factorización LU}, por su parte, aprovecha el hecho de que bajo ciertas condiciones, una matriz $A$ puede factorizarse como el producto de otras dos, en la forma $A = LU$, donde $L$ es triangular inferior con unos en la diagonal, y $U$ es triangular superior. De esta manera, el sistema $Ax=b$ puede reescribirse como $LUx=b$, y luego ser resuelto en dos etapas sencillas: si llamamos $y=Ux$, podemos resolver primero el sistema $Ly=b$ (aplicando sustitución hacia adelante, pues $L$ es triangular inferior), y una vez conocido el valor de $y$, resolver $Ux=y$ (aplicando esta vez sustitución hacia atrás), obteniendo así la solución del sistema original.
 
 \section{Desarrollo}
 
-  Deben explicarse los métodos numéricos que utilizaron y su aplicación al problema concreto involucrado en el trabajo práctico. Se deben mencionar los pasos que siguieron para implementar los algoritmos, las dificultades que fueron encontrando y la descripción de cómo las fueron resolviendo. Explicar también cómo fueron planteadas y realizadas las mediciones experimentales.\footnote{Podemos hacer notas al pie.} Los ensayos fallidos, hipótesis y conjeturas equivocadas, experimentos y métodos malogrados deben figurar en esta sección, con una breve explicación de los motivos de estas fallas (en caso de ser conocidas).
+  {\color{Gray} Deben explicarse los métodos numéricos que utilizaron y su aplicación al problema concreto involucrado en el trabajo práctico. Se deben mencionar los pasos que siguieron para implementar los algoritmos, las dificultades que fueron encontrando y la descripción de cómo las fueron resolviendo. Explicar también cómo fueron planteadas y realizadas las mediciones experimentales. Los ensayos fallidos, hipótesis y conjeturas equivocadas, experimentos y métodos malogrados deben figurar en esta sección, con una breve explicación de los motivos de estas fallas (en caso de ser conocidas).}
 
-  Dados los parámetros de entrada, creamos una matriz asociada al sistema relacionando cada uno de los puntos del dominio con sus vecinos a través de la ecuación de Laplace.
+  \subsection{Modelo y planteo del sistema}
 
-  % Así formamos una matriz diagonal dominante, lo que nos permite asegurarnos que el método de eliminación gaussiana se va a poder llevar a cabo sin necesidad de intercambiar filas, es decir, sin pivoteo.
+    Llamaremos $r_e \in \mathbb{R}_{>0}$ al radio exterior y $r_i \in \mathbb{R}_{>0}$ al radio interior de la pared del horno. Para cada punto, consideraremos sus coordenadas polares $(r, \theta)$ con origen en el centro del horno, y llamaremos $T(r, \theta)$ a la temperatura en dicho punto. En el estado estacionario, esta temperatura satisface la ecuación del calor:
 
-  \subsection{Planteo del sistema y métodos numéricos aplicados}
+    \begin{equation} \label{des:eq1}
+      \frac{\partial^2 T(r, \theta)}{\partial r^2} + \frac{1}{r} \frac{\partial T(r, \theta)}{\partial r} + \frac{1}{r^2} \frac{\partial^2 T(r, \theta)}{\partial \theta^2} = 0
+    \end{equation}
+
+    Para poder tratar computacionalmente el problema, necesitaremos una versión discreta del mismo. Con este fin, consideraremos una partición del sector interno de la pared del horno en $m + 1$ radios equidistantes, $r_i = r_0 < r_1 < \dots < r_m = r_e$, con $r_j - r_{j-1} = \Delta r$ para $j = 1, \dots m+1$, y en $n$ ángulos, $0 = \theta_0 < \theta_1 < ... < \theta_n = 2\pi$, con $\theta_k - \theta_{k-1} = \Delta \theta$ para $k = 1, \dots n$.
+
+    Nuestro objetivo será calcular el valor de $t_{j,k} = T(r_j, \theta_k)$ para $j = 0, \dots m$ y $k = 0, \dots n-1$, utilizando la ecuación (\ref{des:eq1}) y los datos disponibles sobre las condiciones de borde: conocemos el valor de la temperatura en los puntos de la pared externa, $t_{m,k} = T_e(\theta_k)$, para todo $k = 0, \dots n-1$, como así también el valor de la temperatura en el interior del horno, $t_{0,k} = T_i$, que es constante con respecto a $k$.
+
+    Para discretizar el problema continuo planteado por la ecuación (\ref{des:eq1}), utilizaremos las siguientes fórmulas de diferencias finitas:
+    \[ \frac{\partial^2 T(r, \theta)}{\partial r^2}(r_j, \theta_k) \cong \frac{t_{j-1,k} - 2 t_{jk} + t_{j+1,k}}{(\Delta r)^2} \]
+    \[ \frac{\partial T(r, \theta)}{\partial r}(r_j, \theta_k) \cong \frac{t_{j,k} - t_{j-1,k}}{\Delta r} \]
+    \[ \frac{\partial^2 T(r, \theta)}{\partial \theta^2}(r_j, \theta_k) \cong \frac{t_{j,k-1} - 2 t_{jk} + t_{j,k+1}}{(\Delta \theta)^2} \]
+    que nos permiten obtener un conjunto de ecuaciones lineales en las incógnitas $t_{j,k}$.
+
+    En definitiva, reuniremos la información de la que disponemos sobre el problema discreto en un sistema de $(m+1)n$ ecuaciones con $(m+1)n$ incógnitas, cada una de ellas el valor de $t_{j,k}$ para algún $j = 0, \dots m$, $k = 0, \dots n-1$. En otras palabras, el problema de calcular la temperatura en todos los puntos de la discretización se reduce a la resolución del siguiente sistema de ecuaciones lineales:
+
+    \[ \begin{cases}
+    \setlength{\jot}{2em}
+      t_{0,k} = T_i
+        & \text{para } 0 \leq k < n \\[1em]
+      \begin{gathered}
+        \left( \frac{1}{(\Delta r)^2} - \frac{1}{r \Delta r} \right) t_{j-1,k} +
+          \left( \frac{1}{r^2(\Delta \theta)^2} \right) t_{j,k-1} + \\
+          \left( - \frac{2}{(\Delta r)^2} + \frac{1}{r \Delta r} - \frac{2}{r^2(\Delta \theta)^2} \right) t_{j,k} + \\
+          \left( \frac{1}{r^2(\Delta \theta)^2} \right) t_{j,k+1} +
+          \left( \frac{1}{(\Delta r)^2} \right) t_{j+1,k} = 0 \\[1em]
+        \end{gathered}
+        & \text{para } 1 \leq j < m,\ 0 \leq k < n \\
+      t_{m,k} = T_e(\theta_k)
+        & \text{para } 0 \leq k < n \\
+    \end{cases} \]
+
+    Al construir la matriz $A \in \mathbb{R}^{(m+1)n \times (m+1)n}$ asociada a este sistema, ordenaremos las ecuaciones y las variables de la siguiente forma:
+    \begin{itemize}
+      \item La ecuación referida a la variable $t_{j,k}$, es decir, la ecuación donde aparece como única incógnita cuando $j = 0$ o $j = m$, o bien la ecuación donde aparece junto a sus cuatro puntos vecinos en la discretización si $1 \leq j < m$, será representada por la fila $p$-ésima de la matriz, con $p = jn+k$.
+      \item A la variable $t_{j,k}$ le corresponderá la columna $q$-ésima, con $q = jn+k$.
+    \end{itemize}
+
+    La matriz construida de esta forma cumple con la importante propiedad de ser \emph{banda} $n, n$. Esto significa que todos los coeficientes que se encuentran fuera de una banda de ancho $n$ hacia ambos lados de la diagonal son nulos, i.e. $A_{p,q} = 0$ siempre que $\vert p - q \vert > n$. Esto puede verse fácilmente:
+
+    \begin{itemize}
+      \item Las filas $1, \dots, n$ y $mn + 1, \dots, (m+1)n$ de la matriz, que corresponden a las ecuaciones relativas a los puntos de la pared interna y externa del horno, respectivamente, contienen un $1$ en la diagonal y $0$ en todas las demás posiciones, por lo que la propiedad se verifica trivialmente.
+      \item Para $p = n + 1, \dots, mn$, la fila $p$-ésima de la matriz representa a la ecuación relativa a $t_{j,k}$, con $p = jn+k$. Es sencillo comprobar que los coeficientes correspondientes a $t_{j-1,k}$, $t_{j,k-1}$, $t_{j,k}$, $t_{j,k+1}$ y $t_{j+1,k}$ se encontrarán en las columnas $p-n$, $p-1$, $p$, $p+1$ y $p+n$, respectivamente. Estos elementos están confinados a una banda de ancho $n$ hacia ambos lados de la diagonal, y como las variables a las que corresponden son las únicas que aparecen en la ecuación, todos los demás coeficientes de la fila serán necesariamente nulos.
+    \end{itemize}
+
+  \subsection{Métodos utilizados}
+
+    \SetKwFunction{sustAtras}{Sustitución hacia atrás}
+    \SetKwFunction{sustAdelante}{Sustitución hacia adelante}
+
+    \begin{algorithm}[H]
+      \caption{Sustitución hacia atrás}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$, considerando a $A$ como una matriz triangular superior}
+      \For{$i \gets n$ \KwTo $1$}{
+        $suma \gets 0$ \;
+        \For{$j \gets i + 1$ \KwTo $n$}{
+          $suma \gets suma + s_j \cdot A_{i,j}$ \;
+        }
+        $s_i \gets \frac{b_i - suma}{A_{i,i}}$
+      }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Sustitución hacia adelante}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$, considerando a $A$ como una matriz triangular inferior}
+      \For{$i \gets 1$ \KwTo $n$}{
+        $suma \gets 0$ \;
+        \For{$j \gets 1$ \KwTo $i$}{
+          $suma \gets suma + s_j \cdot A_{i,j}$ \;
+        }
+        $s_i \gets \frac{b_i - suma}{A_{i,i}}$
+      }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Eliminación Gaussiana}
+      \KwData{$A \in \mathbb{R}^{n \times n}, b \in \mathbb{R}^n$}
+      \KwResult{$s \in \mathbb{R}^n$, solución del sistema $Ax=b$}
+      \For{$j \gets 1$ \KwTo $n$}{
+        \For{$i \gets 1$ \KwTo $n$}{
+          $m \gets \frac{A_{i,j}}{A_{j,j}}$ \;
+          \For{$k \gets j$ \KwTo $n$}{
+            $A_{i,k} \gets A_{i,k} - m \cdot A_{j,k}$ \;
+          }
+          $b_i \gets b_i - m \cdot b_j$ \;
+        }
+      }
+      $s \gets$ \sustAtras{$A,b$} \;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+      \caption{Factorización LU}
+      \KwData{$A \in \mathbb{R}^{n \times n}$}
+      \KwResult{$B \in \mathbb{R}^{n \times n}$, tal que los elementos ubicados por encima de y en la diagonal forman una matriz triangular superior $U$, y los ubicados por debajo de la misma, completados con unos en la diagonal, forman una matriz triangular inferior $L$, con $LU=A$}
+      \For{$j \gets 1$ \KwTo $n$}{
+        \For{$i \gets 1$ \KwTo $n$}{
+          $m \gets \frac{A_{i,j}}{A_{j,j}}$ \;
+          $B_{i}{j} \gets m$ \;
+          \For{$k \gets j+1$ \KwTo $n$}{
+            $B_{i,k} \gets A_{i,k} - m \cdot A_{j,k}$ \;
+          }
+        }
+      }
+    \end{algorithm}
 
     \subsubsection*{Demostración de que puede aplicarse Eliminación Gaussiana en el sistema estudiado}
 
@@ -225,37 +329,26 @@
 
     Finalmente, decidimos aplicar este último criterio, porque consideramos que brinda información más precisa que los otros dos, al tener en cuenta el valor la diferencia de temperatura entre los puntos de la discretización más cercanos a la isoterma buscada y la isoterma en si misma, información que los dos primeros métodos descartan. De esta manera, nos permite detectar situaciones de riesgo que con el primer método pasarían desapercibidas, pero evitando la generación de falsos positivos que provocaría el segundo método, que es mucho más estricto.
 
+    Para elegir la medida de peligrosidad lo que hacemos es tomar de todos los valores por los que pasa la isoterma el mas próximo a la pared externa del alto horno. A ese valor lo dividimos por el radio externo, dando así la relación entre la distancia mas cercana a la pared externa de la isoterma y la distancia total.
+    Este es un numero entre 1 y 0 donde 0 es el centro del horno y 1 es la pared externa. Cuanto mas cercano a 1 sea el valor, mas peligro de colapsar tiene. 
+
   \subsection{Hipótesis planteadas}
 
     Suponemos que lo que va a pasar es que cuanto mas instancias haya en el sistema, mas diferencia va a haber entre los métodos numéricos a utilizar. El método de eliminación gaussiana es mas lento cuando aumentan las instancias ya que para cada una de ellas recalcula todo el sistema. En cambio, el método de factorización LU calcula la factorización LU del sistema una única vez y después modifica en base a este los parámetros de entrada para calcular el sistema total. Mientras que cuando hay pocas instancias el tiempo que tomarán va a ser muy similar. Eliminación gaussiana para una única instancia es un poco mas rápido que LU ya que no podemos sacar la ventaja de guardar la factorización LU para no recalcular la matriz del sistema cuando es un único sistema y a pesar de tener un orden similar, factorización LU supera a eliminación gaussiana por una constante.
 
   \subsection{Mediciones experimentales realizadas}
 
-
-
-
 \section{Resultados}
 
-  Deben incluir los resultados de los experimentos, utilizando el formato más adecuado para su presentación. Deberán especificar claramente a qué experiencia corresponde cada resultado. No se incluirán aquí corridas de máquina.
+  {\color{Gray} Deben incluir los resultados de los experimentos, utilizando el formato más adecuado para su presentación. Deberán especificar claramente a qué experiencia corresponde cada resultado. No se incluirán aquí corridas de máquina.}
 
 \section{Discusión}
 
-  Se incluirá aquí un análisis de los resultados obtenidos en la sección anterior (se analizará su validez, coherencia, etc.). Deben analizarse como mínimo los ítems pedidos en el enunciado. No es aceptable decir que ``los resultados fueron los esperados'', sin hacer clara referencia a la teoría a la cual se ajustan. Además, se deben mencionar los resultados interesantes y los casos ``patológicos'' encontrados.
+  {\color{Gray} Se incluirá aquí un análisis de los resultados obtenidos en la sección anterior (se analizará su validez, coherencia, etc.). Deben analizarse como mínimo los ítems pedidos en el enunciado. No es aceptable decir que ``los resultados fueron los esperados'', sin hacer clara referencia a la teoría a la cual se ajustan. Además, se deben mencionar los resultados interesantes y los casos ``patológicos'' encontrados.}
 
 \section{Conclusiones}
 
-  Esta sección debe contener las conclusiones generales del trabajo. Se deben mencionar las relaciones de la discusión sobre las que se tiene certeza, junto con comentarios y observaciones generales aplicables a todo el proceso. Mencionar también posibles extensiones a los métodos, experimentos que hayan quedado pendientes, etc.
-
-  \begin{enumerate}
-    \item Podemos hacer listas numeradas
-    \item ¡Con más de un item!
-  \end{enumerate}
-
-  \begin{itemize}
-    \item Incluso podemos hacer
-    \item listas con viñetas
-    \item :D
-  \end{itemize}
+  {\color{Gray} Esta sección debe contener las conclusiones generales del trabajo. Se deben mencionar las relaciones de la discusión sobre las que se tiene certeza, junto con comentarios y observaciones generales aplicables a todo el proceso. Mencionar también posibles extensiones a los métodos, experimentos que hayan quedado pendientes, etc.}
 
 \newpage
 \begin{appendices}
@@ -383,25 +476,10 @@
   \newpage
   \section{Código fuente}
 
-    En el apéndice B se incluirán los códigos fuente de las funciones relevantes desde el punto de vista numérico.
+    {\color{Gray} En el apéndice B se incluirán los códigos fuente de las funciones relevantes desde el punto de vista numérico.
 
-    \begin{algorithm}
-      \caption{Podemos escribir pseudocódigo}
-      \While{true}{
-        $a \gets b$ \;
-      }
-    \end{algorithm}
-
-    También podemos incluir archivos de código:
-    \lstinputlisting[language=C++, firstline=0, lastline=18, style=customcpp]{../src/altohorno.cpp}
-
-  \newpage
-  \section{Otras cosillas}
-
-    \subsection{Demostración de que la matriz del sistema es \emph{banda}}
-      Notemos que la
-
-    Resultados que valga la pena mencionar en el trabajo pero que sean demasiado específicos para aparecer en el cuerpo principal del trabajo podrán mencionarse en sucesivos apéndices rotulados con las letras mayusculas del alfabeto romano. Por ejemplo: la demostración de una propiedad que aplican para optimizar el algoritmo que programaron para resolver un problema.
+    Podemos incluir archivos de código:
+    \lstinputlisting[language=C++, firstline=0, lastline=18, style=customcpp]{../src/altohorno.cpp}}
 
 \end{appendices}
 
@@ -409,10 +487,7 @@
 
 \printbibliography[heading=bibintoc]
 
-  Es importante incluir referencias a libros, artículos y páginas de Internet consultados durante el desarrollo del trabajo, haciendo referencia a estos materiales a lo largo del informe.
-  Se deben citar también las comunicaciones personales con otros grupos.
+  {\color{Gray} Es importante incluir referencias a libros, artículos y páginas de Internet consultados durante el desarrollo del trabajo, haciendo referencia a estos materiales a lo largo del informe.
+  Se deben citar también las comunicaciones personales con otros grupos.}
 
-
-Para elegir la medida de peligrosidad lo que hacemos es tomar de todos los valores por los que pasa la isoterma el mas próximo a la pared externa del alto horno.  A ese valor lo dividimos por el radio externo, dando así la relación entre la distancia mas cercana a la pared externa  de la isoterma y la distancia total.
-Este es un numero entre 1 y 0 donde 0 es el centro del horno y 1 es la pared externa. Cuanto mas cercano a 1 sea el valor, mas peligro de colapsar tiene. 
 \end{document}
