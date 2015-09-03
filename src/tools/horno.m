@@ -1,4 +1,4 @@
-function horno(inputfile, solution, isofile)
+function horno(inputfile, solution, isofile, solout, isoout)
 
 ifid = fopen(inputfile);
 solfid = fopen(solution);
@@ -49,6 +49,11 @@ for k = 1:ninst
     x = reshape(x,angulos,radios);
     x(angulos+1,:) = x(1,:);
     h = pcolor(xdib,ydib,x);
+    axis('auto');
+    if (nargin > 3)
+        print(solout, '-dpng');
+        close;
+    end
 
     %aca ploteo la isoterma
     if (nargin > 2)
@@ -57,7 +62,6 @@ for k = 1:ninst
         radioiso = [radioiso; radioiso(1)];
         radioiso = radioiso';
 
-
         theta=linspace(0,2*pi,angulos+1);
         interno=linspace(radioi,radioi,angulos+1);
         externo=linspace(radioe,radioe,angulos+1);
@@ -65,6 +69,10 @@ for k = 1:ninst
         polar(theta,radioiso);
         polar(theta,interno);
         hold off;
-        pause;
+        axis('auto');
+        if (nargin > 4)
+            print(isoout, '-dpng');
+            close;
+        end
     end
 end
