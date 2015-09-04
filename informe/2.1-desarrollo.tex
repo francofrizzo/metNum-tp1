@@ -223,7 +223,8 @@
 
       \subsubsection*{Factorización LU}
 
-        El algoritmo de \emph{Factorización LU}.
+        El algoritmo de \emph{Factorización LU} Permite resolver un sistema de ecuaciones encontrando dos matrices. Una triangular inferior (L) con unos en la diagonal y otra triangular superior (U) que al multiplicarlas dan como resultado la matriz inicial. Luego nos queda A x = L U x = b
+        Queremos la solución para un determinando A y b. Mediante sustitucion hacia adelante calculamos y = b * l_{-1}. Después con sustitucion hacia atras resolvemos  Ux = y.
 
         \begin{algorithm}[H]
           \caption{Factorización LU}
