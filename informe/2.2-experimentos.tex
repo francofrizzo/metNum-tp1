@@ -26,7 +26,7 @@
   	\subsubsection*{Experimento 5: Tiempo según número de instancias}
   	En este experimento se generan distintas instancias para un mismo sistema, con el objetivo de comparar el tiempo de ejecución al resolverlas mediante el método de eliminación gaussiana y la factorización LU. 
 
-  	Para ello, se crean sistemas con diferentes cantidades de instancias y se comparan los tiermpos de ejecucion de los mismos para cada uno de los metodos. Con el fin de acercarse a los valores reales y descartar posibles falsos resultados, se ejecuta la resolución de un mismo sistema una determinada cantidad de veces y se calcula el promedio de los tiempos medidos.
+  	Para ello, se crean sistemas con diferentes cantidades de instancias y se comparan los tiempos de ejecucion de los mismos para cada uno de los métodos. Con el fin de acercarse a los valores reales y descartar posibles falsos resultados, se ejecuta la resolución de un mismo sistema una determinada cantidad de veces y se calcula el promedio de los tiempos medidos.
 
     Conjeturamos que la diferencia entre los tiempos de ejecución de los dos métodos aumenta con la cantidad de instancias. 
 
@@ -38,9 +38,9 @@
   	\subsubsection*{Experimento 6: Tiempo según granularidad}
   	El objetivo de este experimento es observar como varían los tiempos de ejecución al resolver sistemas con mismas temperaturas pero diferente granularidad, y modificando el método utilizado.
   	
-    Hacemos el mismo experimento dos veces, uno para cada uno de los metodos nuemricos. Manteniendo las temperaturas constantes, variamos cantidad de particiones de los angulos dejando la de los radios intacta. Calculamos la solucion del sistema para cada una de las distintas granularidades y comparamos los tiempos que toman las diferentes ejecuciones. Repetimos esto mismo, ahora variando las particiones de los radios. Luego tomamos el otro metodo numerico y volvemos a iniciar el experimento. 
+    Hacemos el mismo experimento dos veces, uno para cada uno de los métodos nuemricos. Manteniendo las temperaturas constantes, variamos cantidad de particiones de los ángulos dejando la de los radios intacta. Calculamos la solución del sistema para cada una de las distintas granularidades y comparamos los tiempos que toman las diferentes ejecuciones. Repetimos esto mismo, ahora variando las particiones de los radios. Luego tomamos el otro método numérico y volvemos a iniciar el experimento. 
 
-  	La complejidad del algoritmo es cubico en el tamño de la entrada. Como solo variamos la granularidad del radio o del angulo (de jando el otro constante) entonces en ambos casos suponemos que el tiempo de ejecucion va a ser cubico con relacion a la granularidad de la entrada.
+  	La complejidad del algoritmo es cúbico en el tamaño de la entrada. Como solo variamos la granularidad del radio o del ángulo (de jando el otro constante) entonces en ambos casos suponemos que el tiempo de ejecucion va a ser cubico con relacion a la granularidad de la entrada.
 
 
     \subsubsection*{Experimento 7: Isoterma según temperatura en pared externa}
@@ -49,5 +49,3 @@
 
 
     Para ello tomamos dos sistemas con temperaturas externas constantes pero distintos entre si. Graficamos para cada uno de ellos la isoterma 500 y veremos, si la hipotesis es correcta, que en el caso en el que la temperatura externa es mayor, la isoterma esta mas cerca de la pared externa que en el otro caso. 
-
-  \subsection{Mediciones experimentales realizadas}

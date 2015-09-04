@@ -1,13 +1,13 @@
 \section{Discusión}
 
 {
-\subsubsection*{Experimento 1: Isoterma según granularidad - contante}
-	En este experimento se puede observar que cuando cambiamos los angulos la isoterma se aleja mucho mas de la real que cuando variamos los radios. Esto es asi ya que comparando los errores de dejar de considerar temperaturas y el error de tomar una medida como lienal cuando no lo es, la primera es peor y distorsiona mucho mas la isoterma.
+\subsubsection*{Experimento 1: Isoterma según granularidad - constante}
+	En este experimento se puede observar que cuando cambiamos los ángulos la isoterma se aleja mucho más de la real que cuando variamos los radios. Esto es asi ya que comparando los errores de dejar de considerar temperaturas y el error de tomar una medida como lineal cuando no lo es, la primera es peor y distorsiona mucho más la isoterma.
 	
 
 
 \subsubsection*{Experimento 2: Isoterma según granularidad -seno}
-	En este caso se observa lo mismo que en el anterior ya que lo unico que estamos variando es que las temperaturas de la pared externa ahora no son constantes. Ésto no modifica el error de aproximar la isoterma con menos discretizacion en los angulos o en los radios.
+	En este caso se observa lo mismo que en el anterior ya que lo único que estamos variando es que las temperaturas de la pared externa ahora no son constantes. Ésto no modifica el error de aproximar la isoterma con menos discretizacion en los ángulos o en los radios.
 
 
 
@@ -20,11 +20,19 @@
 
 
 \subsubsection*{Experimento 4}
-	En este experimento se puede ver que a medida que disminuimos el grosor de la pared del alto horno la isoterma se encuentra cada vez mas cerca de la pared externa. El indice de peligrosidad mide la relacion entre la temperatura mas alta y la proximidad de la misma a la pared externa. Cuando disminuimos el grosor de la pared, lo que hacemos es acercar la pared interna(donde se encuentra la temperatura mas alta del sistema) a la pared externa. De esta forma la isoterma va a estar mas proxima a la pared externa que cuando el grosor es mayor. Entonces el indice de peligrosidad aumentará, demostrando así lo que se planteó en la hipotesis.
+	En este experimento se puede ver que a medida que disminuimos el grosor de la pared del alto horno la isoterma se encuentra cada vez mas cerca de la pared externa. El índice de peligrosidad mide la relación entre la temperatura más alta y la proximidad de la misma a la pared externa. 
+
+	Cuando disminuimos el grosor de la pared, lo que hacemos es acercar la pared interna(donde se encuentra la temperatura más alta del sistema) a la pared externa. De esta forma la isoterma va a estar mas proxima a la pared externa que cuando el grosor es mayor. Entonces el índice de peligrosidad aumentará, demostrando así lo que se planteó en la hipotesis.
 	
 
 \subsubsection*{Experimento 5: Tiempo según número de instancias}
-	Se observa que cuando hay pocas instancias, buscar la isoterma con el metodo de eliminacion gaussiana o el de factriazacion LU es muy similar. A medida que aumentan las instancias las diferencias entre ambos metodos aumentan, ya que la factorizacion LU se mantiene casi inmutable al aumentar las instancias mientras que la eliminacion gaussiana aumenta notoriamente. Se puede observar que lo que tarda la eliminacion gaussiana cuando tiene 2 instancias es aproximadamentre el doble de lo que tarda cuando es una unica instancia. Cuando son 3 instancias, tarda el triple de lo que tarda cuando es una unica instancia. Entonces saean n instancias entonces lo que tarda la elimimacion gaussiana es lo que tarda cuando es una unica instancia * n. Esto es asi ya que en este metodo numerico, para cada una de las instancias recalcula toda la matriz. En cambio la factorizacion LU, calcula la matriz una unica vez.
+	Se observa que cuando hay pocas instancias, buscar la isoterma con el método de eliminacion gaussiana o el de factriazacion LU es muy similar.
+
+	A medida que aumentan las instancias las diferencias entre ambos métodos aumentan, ya que la factorizacion LU se mantiene casi inmutable al aumentar las instancias mientras que la eliminacion gaussiana aumenta notoriamente.
+
+	Se puede observar que lo que tarda la eliminación gaussiana cuando tiene 2 instancias es aproximadamente el doble de lo que tarda cuando es una única instancia. Cuando son 3 instancias, tarda el triple de lo que tarda cuando es una única instancia. 
+
+	Sean n instancias entonces lo que tarda la eliminación gaussiana es lo que tarda cuando es una única instancia n veces. Esto es asi ya que en este método numérico, para cada una de las instancias recalcula toda la matriz. En cambio la factorizacion LU, calcula la matriz una única vez.
 
 
 \subsubsection*{Experimento 6: Tiempo según granularidad}
