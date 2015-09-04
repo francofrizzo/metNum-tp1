@@ -243,7 +243,7 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
-                cout << "Ïndice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
+                // cout << "Índice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {
                     isofile << fixed << setprecision(6) << isoterma[j] << endl;
@@ -288,7 +288,7 @@ int main(int argc, char* argv[]) {
                 } else if (isoModo == '2') {
                     isoterma = isotermaCasiExacta(res, iso, n, m, re, ri);
                 }
-                cout << "Ïndice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
+                // cout << "Índice de peligrosidad:" << peligrosidad(isoterma, re) << endl;
 
                 // Imprimo la isoterma            
                 for (int j = 0; j < isoterma.tamano(); j++) {

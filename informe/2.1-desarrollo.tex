@@ -1,7 +1,5 @@
 \section{Desarrollo}
 
-  {\color{Gray} Deben explicarse los métodos numéricos que utilizaron y su aplicación al problema concreto involucrado en el trabajo práctico. Se deben mencionar los pasos que siguieron para implementar los algoritmos, las dificultades que fueron encontrando y la descripción de cómo las fueron resolviendo. Explicar también cómo fueron planteadas y realizadas las mediciones experimentales. Los ensayos fallidos, hipótesis y conjeturas equivocadas, experimentos y métodos malogrados deben figurar en esta sección, con una breve explicación de los motivos de estas fallas (en caso de ser conocidas).}
-
   \subsection{Modelado y planteo del sistema}
 
     Llamamos $r_e \in \mathbb{R}_{>0}$ al radio exterior y $r_i \in \mathbb{R}_{>0}$ al radio interior de la pared del horno. Para cada punto, consideramos sus coordenadas polares $(r, \theta)$ con origen en el centro del horno, y llamaremos $T(r, \theta)$ a la temperatura en dicho punto. En el estado estacionario, esta temperatura satisface la ecuación del calor:
@@ -223,8 +221,8 @@
 
       \subsubsection*{Factorización LU}
 
-        El algoritmo de \emph{Factorización LU} Permite resolver un sistema de ecuaciones encontrando dos matrices. Una triangular inferior (L) con unos en la diagonal y otra triangular superior (U) que al multiplicarlas dan como resultado la matriz inicial. Luego nos queda A x = L U x = b
-        Queremos la solución para un determinando A y b. Mediante sustitucion hacia adelante calculamos y = b * l_{-1}. Después con sustitucion hacia atras resolvemos  Ux = y.
+        El algoritmo de \emph{Factorización LU} Permite resolver un sistema de ecuaciones encontrando dos matrices. Una triangular inferior (L) con unos en la diagonal y otra triangular superior (U) que al multiplicarlas dan como resultado la matriz inicial. Luego nos queda $A x = L U x = b$.
+        Queremos la solución para un determinando $A$ y $b$. Mediante sustitucion hacia adelante calculamos $y = b * l_{-1}$. Después con sustitucion hacia atras resolvemos  $Ux = y$.
 
         \begin{algorithm}[H]
           \caption{Factorización LU}
