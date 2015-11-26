@@ -44,6 +44,7 @@
 \theoremstyle{remark}
   \newtheorem{obs}{Observación}
 \setlength{\parskip}{.3em}
+\newcommand{\mat}[1]{\ensuremath{\mathbf{#1}}}
 
 % Encabezado
 \lhead{Métodos Numéricos}
@@ -73,19 +74,10 @@
 \begin{addmargin}[4em]{4em}
 
 \section*{\centering Resumen}
-  {El objetivo de este trabajo es calcular las temperaturas de la pared de un alto horno de fusión de metales. Para ello vamos a tomar el problema de manera discretizada generando asi un sistema de ecuaciones lineales. Para resolverlo aplicamoslos metodos numéricos de eliminación gausseana y factorización LU. Conociendo los valores de las temperaturas de las paredes internas y externas del horno calculamos la isoterma de un valor crítico. 
-
-  Tambien calculamos el índice de peligrosidad, índice que servirá para determinar si el alto horno tiene riesgo de colapsar. Se programaron los algoritmos en c++ y se realizaron experimintos con distintos valores de entrada, variando tambien la granularidad, el grosor de la pared y el método de resolución.}
+  En el presente trabajo, se estudia la utilización de métodos numéricos para calcular las temperaturas en el interior de la pared de un alto horno de fusión de metales, con el objetivo de evaluar así el riesgo de colpaso de la misma. Para este fin, el dominio del problema es discretizado, obteniendo un sistema de ecuaciones lineales, en cuya resolución se emplean los métodos de Eliminación Gaussiana y Factorización LU. Además, se proponen técnicas para la estimación de una isoterma crítica en el interior de la pared y para el cálculo de un índice de peligrosidad que permita determinar el riesgo de colapso. Luego se realizan pruebas experimentales, para así extraer conclusiones tanto acerca del rendimiento temporal de los algoritmos implementados como del comportamiento del sistema y la precisión de las técnicas de evaluación propuestas.
 
 \vspace{4em}
-\noindent \strong{Palabras clave:} {
-Eliminacion Gausseana
-
-Factorizacion LU
-
-Sistema de ecuaciones lineal
-
-Indice de peligrosidad}
+\noindent \strong{Palabras clave:} Eliminación Gaussiana, Factorizacion LU, sistemas de ecuaciones lineales, alto horno, cálculo de isotermas
 
 
 \end{addmargin}
@@ -96,21 +88,16 @@ Indice de peligrosidad}
 \clearpage
 
 % Contenido
-\input{1-intro}
+\input{secciones/1-intro}
 \clearpage
-\input{2.1-desarrollo}
-\input{2.2-experimentos}
-\clearpage
-\input{3-resultados}
-\clearpage
-\input{4-discusion}
-\clearpage
-\input{5-conclusiones}
+\input{secciones/2-desarrollo}
 \clearpage
 
 % Apéndices
-\input{apendices}
-\clearpage
+\begin{appendices}
+  \input{apendices/a-enunciado.tex}
+  \clearpage
+\end{appendices}
 
 % Referencias
 \printbibliography[heading=bibintoc]
