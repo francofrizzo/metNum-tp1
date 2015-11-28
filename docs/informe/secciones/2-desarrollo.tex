@@ -15,7 +15,7 @@
 
         Una manera frecuente de representar un sistema de ecuaciones lineales, que será utilizada en este trabajo, es la matricial, que consiste en expresarlo en la forma
         \[ \mat{A}x = b \]
-        donde 
+        donde
         \[ \mat{A} = \left[ \begin{matrix} a_{1,1} & a_{1,2} & \dots  & a_{1,n} \\
                                            a_{2,1} & a_{2,2} & \dots  & a_{2,n} \\
                                            \vdots  & \vdots  & \ddots & \vdots  \\
@@ -23,7 +23,7 @@
         x = \left[ \begin{matrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{matrix} \right] \in \mathbb{R}^n \qquad
         b = \left[ \begin{matrix} b_1 \\ b_2 \\ \vdots \\ b_m \end{matrix} \right] \in \mathbb{R}^m \]
 
-        Dado un sistema de ecuaciones lineales, existe un conjunto de operaciones que, aplicadas sobre las ecuaciones, generan sistemas \emph{equivalentes}, es decir, que tienen las mismas soluciones. Más especificamente, estas operaciones son:
+        Dado un sistema de ecuaciones lineales, existe un conjunto de operaciones que, aplicadas sobre las ecuaciones, generan sistemas \emph{equivalentes}, es decir, que tienen las mismas soluciones. Más específicamente, estas operaciones son:
         \begin{enumerate}[label=(\alph*), nosep]
             \item Multiplicar una ecuación por una constante $\lambda \in \mathbb{R}$ no nula.
             \item Sumar a una ecuación el resultado de multiplicar otra por una constante $\lambda \in \mathbb{R}$.
@@ -115,15 +115,13 @@
 
             El pseudocódigo que se presenta como Algoritmo \ref{alg:lu-decomposition} muestra el procedimiento a seguir para encontrar la factorización LU de una matriz, asumiendo que dicha factorización existe. El mismo genera como salida una única matriz $\mat{B}$ que contiene tanto los coeficientes no nulos de $\mat{L}$ como los de $\mat{U}$; esta es una optimización destinada a la implementación, con el objetivo de mejorar su eficiencia evitando el almacenamiento de información redundante.
 
-            {\color{red}
-                IMPORTANTE: REVISAR EL PSEUDOCÓDIGO, PORQUE CREO QUE ESTÁ MAL
-            }
+            {\color{red} \strong{IMPORTANTE:} REVISAR EL PSEUDOCÓDIGO, PORQUE CREO QUE ESTÁ MAL}
 
             \vspace{.5em}
             \begin{algorithm}[H]
                 \caption{Factorización LU} \label{alg:lu-decomposition}
                 \KwData{$\mat{A} \in \mathbb{R}^{n \times n}$}
-                \KwResult{$\mat{B} \in \mathbb{R}^{n \times n}$, tal que los elementos ubicados por encima de y en la diagonal forman una matriz triangular superior $\mat{U}$, y los ubicados por debajo de la misma, completados con unos en la diagonal, forman una matriz triangular inferior $\mat{L}$, con $\mat{L}\mat{U}=\mat{A}$}
+                \KwResult{$\mat{B} \in \mathbb{R}^{n \times n}$, tal que los elementos ubicados en la diagonal y por encima de ella forman una matriz triangular superior $\mat{U}$, y los ubicados por debajo de la misma, completados con unos en la diagonal, forman una matriz triangular inferior $\mat{L}$, con $\mat{L}\mat{U}=\mat{A}$}
                 \For{$k \gets 1$ \KwTo $n$}{
                     \For{$j \gets k+1$ \KwTo $n$}{
                         $m \gets \frac{a_{j,k}}{a_{k,k}}$ \;
@@ -145,7 +143,7 @@
     \subsection{Modelado del sistema}
 
         Para resolver el problema presentado en la Introducción, se considerará una sección horizontal del horno, como puede verse en la Figura \ref{fig:seccion-horno}. Se denominará $r_e \in \mathbb{R}_{>0}$ al radio exterior y $r_i \in \mathbb{R}_{>0}$ al radio interior de la pared del horno. Para cada punto, se considerarán sus coordenadas polares $(r, \theta)$ con origen en el centro del horno, llamando $T(r, \theta)$ a la temperatura en dicho punto. Se considerará conocido el valor (constante) de la temperatura en el interior del horno, \[ T_i = T(r, \theta) \qquad (\forall \, r \in [0, r_i], \, \theta \in [0, 2 \pi)) \] como así también el correspondiente a los puntos de la pared externa, \[ T_e(\theta) = T(r_e, \theta) \]
-        
+
         \begin{figure}[h]
           \centering
 
@@ -160,7 +158,7 @@
             \frac{\partial^2 T(r, \theta)}{\partial r^2} + \frac{1}{r} \frac{\partial T(r, \theta)}{\partial r} + \frac{1}{r^2} \frac{\partial^2 T(r, \theta)}{\partial \theta^2} = 0
         \end{equation}
 
-        No obstante, esta ecuación plantea un modelo continuo para estudiar el problema. Para poder tratar computacionalmente el mismo, se hace necesario discretizar su dominio, considerando una cantidad finita de puntos del mismo. Con este fin, se adoptará una partición del sector interno de la pared del horno, tal y como ilustra la Figura \ref{fig:discretizacion}, en $m + 1$ radios equidistantes 
+        No obstante, esta ecuación plantea un modelo continuo para estudiar el problema. Para poder tratar computacionalmente el mismo, se hace necesario discretizar su dominio, considerando una cantidad finita de puntos del mismo. Con este fin, se adoptará una partición del sector interno de la pared del horno, tal y como ilustra la Figura \ref{fig:discretizacion}, en $m + 1$ radios equidistantes
         \[ r_i = r_0 < r_1 < \dots < r_m = r_e \text{, \qquad con } r_j - r_{j-1} = \Delta r \text{ para } j = 1, \dots, m+1 \]
         y en $n$ ángulos iguales
         \[ 0 = \theta_0 < \theta_1 < ... < \theta_n = 2\pi \text{, \qquad con } \theta_k - \theta_{k-1} = \Delta \theta \text{ para } k = 1, \dots, n \]
@@ -180,7 +178,7 @@
         \begin{align*}
             \frac{\partial^2 T(r, \theta)}{\partial r^2}(r_j, \theta_k) &\cong \frac{t_{j-1,k} - 2 t_{jk} + t_{j+1,k}}{(\Delta r)^2} \\
             \frac{\partial T(r, \theta)}{\partial r}(r_j, \theta_k) &\cong \frac{t_{j,k} - t_{j-1,k}}{\Delta r} \\
-            \frac{\partial^2 T(r, \theta)}{\partial \theta^2}(r_j, \theta_k) &\cong \frac{t_{j,k-1} - 2 t_{jk} + t_{j,k+1}}{(\Delta \theta)^2} 
+            \frac{\partial^2 T(r, \theta)}{\partial \theta^2}(r_j, \theta_k) &\cong \frac{t_{j,k-1} - 2 t_{jk} + t_{j,k+1}}{(\Delta \theta)^2}
         \end{align*}
         que, reemplazadas en la ecuación (\ref{eq:calor}), permiten obtener una formulación de la temperatura en estos puntos en función de sus cuatro puntos vecinos más próximos. Más específicamente, para $1 \leq j < m,\ 0 \leq k < n$, se tiene que:
         \begin{multline} \label{eq:calor-discreto}
@@ -294,11 +292,11 @@
         De la demostración anterior se desprende que para todo $p = 1, \dots, (m+1)n$, $\vert a_{p,p} \vert > 0$; es decir, la diagonal de $\mat{A}$ no contiene ceros.
         \end{obs}
 
-        Por último, se debe probar que las $(m+1)n$ iteraciones del algoritmo de Eliminación Gaussiana necesarias para resolver el sistema pueden aplicarse, y que no es necesario utilizar pivoteo. La idea será demostrar que, para todo $u \leq (m+1)n$, pueden aplicarse $u$ iteraciones de Eliminación Gaussiana sobre $\mat{A}$ sin pivoteo, y que además, la matriz $\mat{A}^{(u)}$ que resulta de este proceso es diagonal dominante, y su fila $u + 1$ es no nula. La demostración será por inducción en $u$.
+        Por último, se debe probar que las $(m+1)n$ iteraciones del algoritmo de Eliminación Gaussiana necesarias para resolver el sistema pueden aplicarse, y que no es necesario utilizar pivoteo. La idea será demostrar que, para todo $u \leq (m+1)n$, pueden aplicarse $u$ pasos de Eliminación Gaussiana sobre $\mat{A}$ sin pivoteo, y que además, la matriz $\mat{A}^{(u)}$ que resulta de este proceso es diagonal dominante, y su fila $u + 1$ es no nula. La demostración será por inducción en $u$.
 
         \begin{enumerate}[label=(\roman*)]
-            \item \strong{Caso base.} Como $a_{1,1} = 1$ no es nulo, se puede aplicar la primera iteración de Eliminación Gaussiana sin realizar pivoteo. Dado que $\mat{A}$ es diagonal dominante, por el Lema \ref{lema:EG conserva diagonal dominante}, la matriz $]mat{A}^{(1)}$ obtenida también será diagonal dominante. Además, se sabe que $a_{1,2} = 0$, por lo que la primera iteración del algoritmo no afectará al coeficiente $a_{2,2}$, que era necesariamente no nulo (ver Observación \ref{obs:Diagonal de A sin ceros}). Luego, la segunda fila de $\mat{A}^{(1)}$ será no nula.
-                    
+            \item \strong{Caso base.} Como $a_{1,1} = 1$ no es nulo, se puede aplicar la primera iteración de Eliminación Gaussiana sin realizar pivoteo. Dado que $\mat{A}$ es diagonal dominante, por el Lema \ref{lema:EG conserva diagonal dominante}, la matriz $\mat{A}^{(1)}$ obtenida también será diagonal dominante. Además, se sabe que $a_{1,2} = 0$, por lo que la primera iteración del algoritmo no afectará al coeficiente $a_{2,2}$, que era necesariamente no nulo (ver Observación \ref{obs:Diagonal de A sin ceros}). Luego, la segunda fila de $\mat{A}^{(1)}$ será no nula.
+
             \item \strong{Paso inductivo.} Por hipótesis inductiva, la matriz $\mat{A}^{(u-1)}$, obtenida tras aplicar $u-1$ pasos de Eliminación Gaussiana sobre $\mat{A}$, es diagonal dominante y su $u$-ésima fila es no nula. Esto implica que $a^{(u-1)}_{u,u} \neq 0$.
 
             Nótese que es posible escribir a $\mat{A}^{(u-1)}$ por bloques de la siguiente manera:
@@ -318,29 +316,36 @@
 
         \subsubsection{Estimación de la posición de la isoterma crítica}
 
-            Además de contar con métodos para la resolución del sistema, la resolución del problema requirió la elaboración con criterios para interpretar los resultados obtenidos. Uno de los aspectos necesarios fue la posibilidad de estimar el conjunto de puntos en el interior del horno que se encontraban a una temperatura dada, es decir, la posición de la isoterma correspondiente.
+            Además de contar con métodos para la resolución del sistema, la elaboración del trabajo requirió la elaboración de criterios para interpretar los resultados obtenidos. Uno de los aspectos a tener en cuenta fue la necesidad de aproximar el conjunto de puntos en el interior del horno que se encontraban a una temperatura dada, es decir, la posición de la isoterma correspondiente.
 
-            Como criterio general, se decidió evaluar independientemente los valores encontrados para cada uno de los ángulos de la discretización, procurando estimar, para cada uno de estos radios, el radio del punto cuya temperatura fuera la buscada. Más formalmente, dada una temperatura $c$, se buscó calcular un vector $i = (i_0, \dots, i_{n-1})$, donde cada $i_k$ es tal que $T(i_k, \Theta_k) = c$.
+            Como criterio general, se decidió evaluar independientemente los valores encontrados para cada uno de los ángulos de la discretización, procurando estimar, para cada uno de estos radios, el radio del punto cuya temperatura fuera la buscada. Más formalmente, dada una temperatura $c$, se buscó calcular un vector $\iota = (\iota_0, \dots, \iota_{n-1})$, donde cada $\iota_k$ es tal que $T(i_k, \theta_k) = c$.
 
-            Un análisis sencillo de las funciones involucradas permitió arribar a la conclusión de que, a lo largo de cada ángulo, la temperatura se comportaría de forma monótona, por lo que en general el valor $i_k$ estaría bien definido; más aún teniendo en cuenta que, dado el contexto de aplicación, cabe esperar temperaturas muy superiores en el interior que en el exterior del horno. En el caso excepcional de que la temperatura se mantuviera constante a lo largo del ángulo, debería procurarse elegir el más externo de los puntos válidos, para no afectar así la estimaciones posteriores acerca del riesgo de la estructura, que dependen de la cercanía de la isoterma a la pared.
+            Un análisis sencillo de las funciones involucradas permitió arribar a la conclusión de que, a lo largo de cada ángulo, la temperatura se comporta de forma monótona, por lo que en general el valor $\iota_k$ está bien definido; más aún teniendo en cuenta que, dado el contexto de aplicación, cabe esperar temperaturas muy superiores en el interior que en el exterior del horno. En el caso de que la temperatura se mantuviera constante a lo largo del ángulo, obteniendo más de un punto válido para la posición de la isoterma, se decidió que se elegiría el más externo de ellos, para no afectar así las estimaciones posteriores acerca del riesgo de la estructura, que dependen de la cercanía de la isoterma a la pared.
 
-            Se evaluaron tres técnicas diferentes para la estimación de los valores $i_k$, que se enumeran a continuación:
+            Se evaluaron tres técnicas diferentes para la estimación de los valores $\iota_k$, que se enumeran a continuación:
 
             \begin{enumerate}
-                \item Para cada ángulo $\theta_k$, elegir entre los radios de la discretización aquel cuya temperatura fuera más próxima a la temperatura crítica $c$. Este criterio es sumamente sencillo, pero se ve seriamente limitado al tomar en cuenta únicamente puntos de la discretización; esto podría causar que se viera seriamente afectado si la misma tuviera una baja granularidad en cuanto a cantidad de radios considerados. Peor aún, la isoterma real podría estar más cerca de la pared externa del horno que la estimada con este método, evitando, especialmente en conjunción con el problema recién mencionado, que se detecten situaciones de riesgo.
-                \item Para cada ángulo $\theta_k$, determinar el más externo de los radios de la discretización cuya temperatura fuera mayor o igual que la temperatura crítica $c$, y elegir luego como $i_k$ el radio de la discretización inmediatamente exterior. Esto equivale a seleccionar el más interno de los radios de la discretización tal que su temperatura y las de todos los radios más externos fuera menor a $c$, es decir 
-                \[ i_k = \min \left\lbrace r_j \; \vert \; 0 \leq j \leq m \; \land \; t_{j',k} < c \, (\forall \, j' = j, \dots, m) \right\rbrace \]
-                La ventaja de este método es que asegura que la isoterma nunca se encontrará más cerca de la pared externa que el resultado arrojado, garantizando que se detectarán todas las posibles situaciones de riesgo.
-                \item Para cada ángulo $\theta_k$, considerar $\tilde{r_j}$, el más externo de los radios de la discretización con temperatura mayor o igual a $c$. Luego, sabiendo que la isoterma buscada se encontrará entre este radio y el inmediatamente exterior, aproximar la variación de la temperatura en los puntos intermedios mediante una función lineal y utilizar esta aproximación para estimar la posición de la isoterma. Más precisamente
-                \[ i_k = r_j + \Delta r \left(\frac{c - t_{j,k}}{t_{j+1,k} - t_{j,k}} \right) \]
-            \end{enumerate}
+                \item Para cada ángulo $\theta_k$, elegir entre los radios de la discretización aquel cuya temperatura sea más próxima a la temperatura crítica $c$.
 
-            Finalmente, decidimos aplicar este último criterio, porque consideramos que brinda información más precisa que los otros dos, al tener en cuenta el valor la diferencia de temperatura entre los puntos de la discretización más cercanos a la isoterma buscada y la isoterma en si misma, información que los dos primeros métodos descartan. De esta manera, nos permite detectar situaciones de riesgo que con el primer método pasarían desapercibidas, pero evitando la generación de falsos positivos que provocaría el segundo método, que es mucho más estricto.
+                Este criterio es sumamente sencillo, pero se ve limitado al tomar en cuenta únicamente puntos de la discretización; esto podría causar que se viera seriamente afectado si la misma tuviera una baja granularidad en cuanto a cantidad de radios considerados. Peor aún, la isoterma real podría estar más cerca de la pared externa del horno que la estimada con este método, evitando, especialmente en conjunción con el problema recién mencionado, que se detecten situaciones de riesgo.
+
+                \item Para cada ángulo $\theta_k$, determinar el más externo de los radios de la discretización cuya temperatura sea mayor o igual que la temperatura crítica $c$, y elegir luego como $\iota_k$ el radio de la discretización inmediatamente exterior. Esto equivale a seleccionar el más interno de los radios de la discretización tal que su temperatura y las de todos los radios más externos sea menor a $c$, es decir
+                \[ \iota_k = \min \left\lbrace r_j \; \vert \; 0 \leq j \leq m \; \land \; t_{j',k} < c \, (\forall \, j' = j, \dots, m) \right\rbrace \]
+
+                Al igual que el anterior, este método adolece del problema de solo tener en cuenta puntos de la discretización. La diferencia es que, si se asume la hipótesis ya discutida de que la temperatura será decreciente hacia el exterior del horno, esta técnica puede asegurar que la isoterma nunca se encontrará más cerca de la pared externa que el resultado arrojado, garantizando que se detectarán todas las posibles situaciones de riesgo. No obstante, si la granularidad es baja y el método resulta ser sensible a la misma, podrían generarse falsos positivos, dando lugar a concluir erróneamente que la estructura corre peligro.
+
+                \item Para cada ángulo $\theta_k$, considerar $r_j$, el más externo de los radios de la discretización con temperatura mayor o igual a $c$. Luego, sabiendo que la isoterma buscada se encontrará entre este radio y el inmediatamente exterior, aproximar la variación de la temperatura en los puntos intermedios mediante una función lineal y utilizar esta aproximación para estimar la posición de la isoterma, tomando
+                \[ \iota_k = r_j + \Delta r \left(\frac{c - t_{j,k}}{t_{j+1,k} - t_{j,k}} \right) \]
+
+                Esta opción tiene en cuenta el hecho de que la temperatura es una función continua, y que en un estado estacionario tiende a estabilizarse y no a presentar saltos bruscos, por lo que se puede esperar que una función lineal resulte una aproximación aceptable de su comportamiento. A diferencia de las otras dos técnicas planteadas, esta contempla la posibilidad de que la isoterma se encuentre a mitad de camino entre dos radios de la discretización, y se considera esperable que arroje resultados razonables incluso con menores granularidades. Esto le permite detectar situaciones de riesgo que con el primer método pasarían desapercibidas, pero evitando la generación de falsos positivos que podría provocar el segundo método. Por estas razones, esta fue la técnica elegida para realizar las estimaciones, por considerarla superior a las otras dos propuestas.
+            \end{enumerate}
 
         \subsubsection{Cálculo del índice de peligrosidad}
 
-            Para elegir la medida de peligrosidad lo que hacemos es tomar de todos los valores por los que pasa la isoterma el mas próximo a la pared externa del alto horno. A ese valor lo dividimos por el radio externo, dando así la relación entre la distancia mas cercana a la pared externa de la isoterma y la distancia total.
-            Este es un numero entre 1 y 0 donde 0 es el centro del horno y 1 es la pared externa. Cuanto mas cercano a 1 sea el valor, mas peligro de colapsar tiene.
+            A la hora de utilizar el resultado del cálculo de la posición de la isoterma para determinar el riesgo de colapso de la estructura, se decidió adoptar como parámetro la mínima distancia entre la isoterma y la pared externa del horno. Se favoreció este criterio, por encima de otras opciones, como el cálculo de una distancia promedio, por considerar la posibilidad de que un pico de temperatura en un sector puntual de la pared sea suficiente para generar una situación de peligro, que podría pasar desapercibida en el caso de utilizar un índice más ponderado.
+
+            El índice de peligrosidad que se calcula es un valor normalizado con respecto al radio externo del horno, que se obtiene mediante la fórmula
+            \[ \operatorname{IP} = \frac{\hat{\iota}}{r_e} \qquad \text{donde } \hat{\iota} = \max_{k = 1, \dots, n-1} \left\lbrace \iota_k \right\rbrace \]
 
     \subsection{Implementación}
 
