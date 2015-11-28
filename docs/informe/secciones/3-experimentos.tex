@@ -11,7 +11,7 @@
         Hacemos el mismo experimento dos veces, uno para cada uno de los métodos numéricos. Manteniendo las temperaturas constantes, variamos cantidad de particiones de los ángulos dejando la de los radios intacta. Calculamos la solución del sistema para cada una de las distintas granularidades y comparamos los tiempos que toman las diferentes ejecuciones. Repetimos esto mismo, ahora variando las particiones de los radios. Luego tomamos el otro método numérico y volvemos a iniciar el experimento. 
 
       \subsubsection*{Datos}
-        Para ambos casos, se construyeron escenarios de prueba con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $T_i = 1500$, $iso = 500$. La temperatura externa se consideró constante, con $T_e(\theta) = 50$ para todo $\theta$. En ambos casos las pruebas se realizaron utilizando primero el método de Eliminación Gaussiana y luego el de Factorización LU, y los tiempos de ejecución se tomaron en segundos, utilizando la librería \texttt{ctime} de \texttt{C++}. Para las pruebas se omitió realizar la estimación de la posición de la isoterma, limitándose a resolver el sistema por el método elegido ya que el cálculo de la isoterma es idéntico en ambos algoritmos y no afectará al análisis del tiempo de ejecución. 
+        Para ambos casos, se construyeron escenarios de prueba con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $T_i = 1500$, $iso = 500$. La temperatura externa se consideró constante, con $T_e(\theta) = 50$ para todo $\theta$. En ambos casos las pruebas se realizaron utilizando primero el método de Eliminación Gaussiana y luego el de Factorización LU, y los tiempos de ejecución se tomaron en ciclos de reloj, utilizando la librería \texttt{ctime} de \texttt{C++}. Para las pruebas se omitió realizar la estimación de la posición de la isoterma, limitándose a resolver el sistema por el método elegido ya que el cálculo de la isoterma es idéntico en ambos algoritmos y no afectará al análisis del tiempo de ejecución. 
       
           \paragraph{Caso A} 
           Se realizaron pruebas variando la cantidad de ángulos de la discretización, con $m + 1 = 30$ y $n = 10, 30, 50, 70, 90$. Se puede encontrar en los archivos adjuntos llamados exp1a-$n$.in la instancia pasada por parámetro.
@@ -44,7 +44,7 @@
 
 
      \subsubsection*{Discusión}
-        En los dos gráficos correspondientes a este experimento, es claro el crecimiento del tiempo de ejecución, a medida que la granularidad aumenta, tanto en los ángulos como en los radios. Esto se debe a la complejidad de los algoritmos utilizados. 
+        En todos los gráficos correspondientes a este experimento, es claro el crecimiento del tiempo de ejecución, a medida que la granularidad aumenta, tanto en los ángulos como en los radios. Esto se debe a la complejidad de los algoritmos utilizados. 
         Además, se puede observar que modificar la granularidad de radios o de ángulos es indistinto.
         También, es importante notar como el tiempo de ejecución sobre una sola instancia no cambia demasiado al modificar el método de resolución. Sabemos que, cuando se trata de un solo caso, factorización LU tiene complejidad mayor por constantes que eliminación gaussiana, lo que se puede visualizar en los casos con mayor granularidad de la discretización.
 
@@ -82,10 +82,10 @@
     \subsubsection*{Experimento 3: Isoterma según temperatura en pared externa} 
       
       \subsubsection*{Presentación}
-        En este experimento vamos a observar como varia la isoterma cuando modificamos la temperatura de la pared externa del horno. Para ello tomamos dos sistemas con temperaturas externas constantes pero distintos entre si. Graficamos para cada uno de ellos la isoterma 500. 
+        En este experimento vamos a observar como varía la isoterma cuando modificamos la temperatura de la pared externa del horno. Para ello tomamos dos sistemas con temperaturas externas constantes pero distintos entre sí. Graficamos para cada uno de ellos la isoterma 500. 
       
       \subsubsection*{Datos}
-        Se evaluaron dos escenarios de prueba, ambos con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $m+1 = 30$, $n = 30$, $T_i = 1500$, $iso = 500$. Se utilizaron temperaturas externas constantes en todos los puntos $(r_e, \theta)$ de la discretización, con $T_e(\theta) = 50$ grados en uno de los casos y $T_e(\theta) = 200$ grados en el otro. Se puede encontrar en los archivos adjuntos llamados exp3-$T_e(\theta)$.in la instancia pasada por parámetro.
+        Se evaluaron dos escenarios de prueba, ambos con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $m+1 = 30$, $n = 30$, $T_i = 1500$, $iso = 500$. Se utilizaron temperaturas externas constantes en todos los puntos $(r_e, \theta)$ de la discretización, con $T_e(\theta) = 50${\degree}C en uno de los casos y $T_e(\theta) = 200${\degree}C en el otro. Se puede encontrar en los archivos adjuntos llamados exp3-$T_e(\theta)$.in la instancia pasada por parámetro.
 
       \subsubsection*{Hipótesis}
         Suponemos que cuando mayor sea la temperatura, la isoterma estará mas cerca de la pared externa del alto horno. 
@@ -99,9 +99,9 @@
             \end{center}
 
       \subsubsection*{Discusión}
-        En este experimento se puede ver que la isoterma magenta se encuentra mas próxima a la pared interna del horno ya que corresponde a la instancia que tiene menor temperatura en la pared externa (50 grados). Lo mismo ocurre con la isoterma verde que se encuentra más cerca de la pared externa debido a que las temperaturas son más altas (200 grados).
+        En este experimento se puede ver que la isoterma magenta se encuentra mas próxima a la pared interna del horno ya que corresponde a la instancia que tiene menor temperatura en la pared externa (50{\degree}C). La isoterma verde se encuentra más cerca de la pared externa debido a que las temperaturas son más altas (200{\degree}C).
 
-        Además, en uno de los casos la temperatura externa es la máxima posible y en el otro la mínima. Podemos observar que nunca, con esta discretización, para ningún valor de temperaturas externas válidas, la isoterma puede pasar mas cerca de la pared externa del alto horno que lo que pasa la isoterma marcada en el gráfico con verde. Tampoco es posible que la isoterma pase más cerca de la pared interna del horno de lo que pasa la isoterma marcada en el gráfico con color magenta.
+        En uno de los casos la temperatura externa es la máxima posible y en el otro la mínima. Podemos observar que nunca, con esta discretización, para ningún valor de temperaturas externas válidas, la isoterma puede pasar mas cerca de la pared externa del alto horno que lo que pasa la isoterma marcada en el gráfico con verde. Tampoco es posible que la isoterma pase más cerca de la pared interna del horno de lo que pasa la isoterma marcada en el gráfico con color magenta.
 
 
     \subsubsection*{Experimento 4: Isoterma según granularidad} 
@@ -112,7 +112,7 @@
 
       \subsubsection*{Datos}
 
-      \paragraph{Temperaturas constantes}
+      \subsubsection*{Temperaturas constantes:}
 
         Para ambos casos se consideraron instancias de prueba con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $T_i = 1500$, $iso = 500$. Se utilizó una temperatura externa constante en todos los puntos $(r_e, \theta)$ de la discretización, ($T_e(\theta) = 50$). 
 
@@ -122,8 +122,7 @@
 
         \paragraph{Caso B} Se mantuvo constante la cantidad de ángulos de la discretización $n = 90$, y se tomaron instancias con diferentes cantidades de radios, para $m + 1 = 3, 5, 8, 10, 30, 50$. Los gráficos que incluimos representan los resultados obtenidos para $m + 1 = 3, 8, 30$, reflejando las temperaturas calculadas y la ubicación estimada de la isoterma (en verde), comparada con la obtenida para el caso de contraste (en magenta). Se puede encontrar en los archivos adjuntos llamados exp4-const-rad-$n$.in  la instancia pasada por parámetro.
 
-      \paragraph{Variando temperaturas}
-
+      \subsubsection*{Variando temperaturas:}
         Para ambos casos se consideraron instancias de prueba con los siguientes parámetros: $r_i = 30$, $r_e = 60$, $T_i = 1500$, $iso = 500$. Se generó una instancia de prueba con una temperatura externa variable entre 50 y 200{\degree}C en todos los puntos $(r_e, \theta)$ de la discretización. 
         Para la generación de las instancias de prueba se consideró la función $T_e(\theta) = 125 + 75 \sin(2\theta)$ para que la variación de temperaturas sea suave.
         En primer lugar, se calculó la solución del sistema y la posición estimada de la isoterma para una discretización considerablemente granular, con $m + 1 = 70$ y $n = 90$, para utilizar como caso de contraste. Reproducimos los gráficos que representan las temperaturas calculadas para todos los puntos de la discretización y la ubicación estimada de la isoterma.
@@ -138,7 +137,7 @@
 
       \subsubsection*{Resultados}
 
-        Para estos gráficos tomaremos el color rojo como las temperaturas más calientes siendo el rojo más oscuro la temperatura de 1500 grados y azul las temperaturas más frías siendo el azul más oscuro 50 grados.
+        Para estos gráficos tomaremos el color rojo como las temperaturas más calientes siendo el rojo más oscuro la temperatura de 1500{\degree}C y azul las temperaturas más frías siendo el azul más oscuro 50{\degree}C.
         
       \subsubsection*{Temperaturas constantes}
 
@@ -211,7 +210,7 @@
             \end{tabular}}
 
       \subsubsection*{Discusión}
-        Como se puede observar en los resultados, variar la granularidad con respecto a los ángulos no afecta al resultado de la posición de la isoterma. Ésta sigue siendo igual que la de contraste. Cuanto mayor cantidad de ángulos se tengan, más información podrá verse pero sin afectar el resultado total. En cambio, cuando modificamos la granularidad con respecto a los radios la isoterma calculada se aleja de la de contraste. Dejamos a experimento futuro observar que tanto se modifica dependiendo de las temperaturas de la pared externa del horno. Para ello podíamos tomar valores de temperaturas externas mayores que 200 grados y menores que 50 grados a modo de análisis.
+        Como se puede observar en los resultados, variar la granularidad con respecto a los ángulos no afecta al resultado de la posición de la isoterma. Ésta sigue siendo igual que la de contraste. Cuanto mayor cantidad de ángulos se tengan, más información podrá verse pero sin afectar el resultado total. En cambio, cuando modificamos la granularidad con respecto a los radios la isoterma calculada se aleja de la de contraste. Dejamos a experimento futuro observar que tanto se modifica dependiendo de las temperaturas de la pared externa del horno. Para ello podíamos tomar valores de temperaturas externas mayores que 200{\degree}C y menores que 50{\degree}C a modo de análisis.
 
 
     \subsubsection*{Experimento 5: Índice de peligrosidad según ancho de la pared}
@@ -220,7 +219,7 @@
         Se busca estudiar la variación de la medida de peligrosidad con respecto al grosor de la pared del alto horno, sin modificar las temperaturas de la pared externa. Para ello modificaremos el radio interno dejando constante el externo. Se realizará de esta manera ya que para lo que se quiere observar es indistinto cual de los dos variar. 
 
       \subsubsection*{Datos}
-        Para este experimento se mantuvieron constantes los parámetros, $r_e = 90$, $m+1 = 30$, $n = 80$, $T_i = 1500$, $iso = 500$, como así también la temperatura externa $T_e(\theta)$, para la cual se tomaron valores arbitrarios entre 50 y 200{\degree}C. Se generaron instancias con los siguientes valores de $r_i$: $5, 10, 20, 40, 60, 80, 90$.  Se puede encontrar en los archivos adjuntos llamados exp5-$r_i$.in la instancia pasada por parámetro.
+        Para este experimento se mantuvieron constantes los parámetros, $r_e = 90$, $m+1 = 30$, $n = 80$, $T_i = 1500$, $iso = 500$, como así también la temperatura externa $T_e(\theta)$, para la cual se tomaron valores arbitrarios entre 50{\degree}C y 200{\degree}C. Se generaron instancias con los siguientes valores de $r_i$: $5, 10, 20, 40, 60, 80, 90$.  Se puede encontrar en los archivos adjuntos llamados exp5-$r_i$.in la instancia pasada por parámetro.
      
       \subsubsection*{Hipótesis}
         La hipótesis de este experimento es que a medida que el grosor de la pared disminuye, el índice de peligrosidad aumenta. Suponemos que esto se debe a que al dejar las temperaturas constantes, la isoterma se encuentra cada vez más cerca de la pared externa.
